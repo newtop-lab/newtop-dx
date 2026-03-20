@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWTOP | 에너지 DX & 탄소중립 솔루션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        html { scroll-behavior: smooth; font-family: 'Pretendard', sans-serif; }
+        .bg-hero { 
+            background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); 
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-hero::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.05;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm fixed w-full z-50 top-0 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div class="flex flex-col">
+                        <span class="font-black text-2xl text-slate-900 tracking-tighter leading-none">NEWTOP</span>
+                        <span class="text-[10px] text-blue-600 font-bold tracking-widest uppercase">Energy DX Specialist</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <a href="뉴탑4.6.html" class="inline-flex items-center px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-blue-700 transition-all shadow-md">
+                        AI 진단 솔루션 실행 <i class="fa-solid fa-chevron-right ml-2 text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-hero text-white pt-40 pb-24 px-4 sm:px-6 lg:px-8 text-center min-h-[85vh] flex flex-col justify-center items-center">
+        <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8 transform hover:scale-105 transition-transform cursor-default">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            </span>
+            <span class="text-blue-200 text-xs font-bold tracking-widest uppercase">Predictive Energy DX Platform</span>
+        </div>
+        
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-8 leading-[1.1]">
+            에너지 효율의 혁신,<br/>
+            <span class="gradient-text">뉴탑이 실현합니다</span>
+        </h1>
+        
+        <p class="max-w-3xl mx-auto text-lg sm:text-xl text-slate-400 mb-12 leading-relaxed font-light">
+            독보적인 <span class="text-white font-semibold">RES3366</span> 기술과 데이터 기반 열손실 진단 알고리즘으로<br class="hidden md:block" />
+            산업 현장의 탄소 중립과 획기적인 비용 절감을 동시에 달성하십시오.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
+            <a href="뉴탑4.6.html" class="group relative px-10 py-5 bg-blue-600 rounded-xl text-lg font-bold overflow-hidden shadow-[0_20px_50px_rgba(37,99,235,0.3)] transition-all hover:-translate-y-1">
+                <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span class="relative flex items-center justify-center">
+                    <i class="fa-solid fa-chart-pie mr-3"></i> 실시간 DX 진단 시작
+                </span>
+            </a>
+            <a href="#features" class="px-10 py-5 bg-white/5 border border-white/10 rounded-xl text-lg font-bold hover:bg-white/10 transition-all backdrop-blur-sm">
+                기술 리포트 보기
+            </a>
+        </div>
+
+        <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 opacity-40">
+            <div class="flex flex-col items-center"><span class="text-2xl font-bold">15Y+</span><span class="text-xs uppercase tracking-widest">Expertise</span></div>
+            <div class="flex flex-col items-center"><span class="text-2xl font-bold">RES3366</span><span class="text-xs uppercase tracking-widest">Patented Tech</span></div>
+            <div class="flex flex-col items-center"><span class="text-2xl font-bold">AI Model</span><span class="text-xs uppercase tracking-widest">Analysis</span></div>
+            <div class="flex flex-col items-center"><span class="text-2xl font-bold">ROI 3-STEP</span><span class="text-xs uppercase tracking-widest">Reliability</span></div>
+        </div>
+    </header>
+
+    <section id="features" class="py-32 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-sm font-bold text-blue-600 uppercase tracking-[0.3em] mb-4">Core Solutions</h2>
+                    <p class="text-4xl font-black text-slate-900 leading-tight">뉴탑만의 압도적인<br/>기술력을 경험해 보세요</p>
+                </div>
+                <p class="text-slate-500 max-w-sm">정밀한 진단 시스템과 친환경 촉매 기술의 결합으로 최적화된 에너지 효율 리포트를 제공합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group p-10 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500">
+                    <div class="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:scale-110 transition-transform duration-500 shadow-lg shadow-blue-200">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">RES3366 정밀 처방</h3>
+                    <p class="text-slate-600 leading-relaxed mb-6">뉴탑의 독자적인 <b>RES3366</b> 기술을 통해 연소 효율을 극대화하고 낭비되는 열손실을 혁신적으로 개선합니다.</p>
+                    <ul class="space-y-3 text-sm font-medium text-slate-500">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-blue-500 mr-2"></i> 불완전 연소 즉각 해결</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-blue-500 mr-2"></i> 슬러지 및 그을음 억제</li>
+                    </ul>
+                </div>
+
+                <div class="group p-10 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500">
+                    <div class="w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:scale-110 transition-transform duration-500 shadow-lg shadow-emerald-200">
+                        <i class="fa-solid fa-earth-asia"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">지속 가능한 ESG</h3>
+                    <p class="text-slate-600 leading-relaxed mb-6">효율 개선은 곧 탄소 배출 저감으로 이어집니다. 기업의 환경 책임을 실천하고 실질적인 연료비 절감 혜택을 제공합니다.</p>
+                    <ul class="space-y-3 text-sm font-medium text-slate-500">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> 탄소 배출권 대응 가능</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2"></i> 친환경 인증 기술 적용</li>
+                    </ul>
+                </div>
+
+                <div class="group p-10 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-white hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500">
+                    <div class="w-14 h-14 bg-purple-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:scale-110 transition-transform duration-500 shadow-lg shadow-purple-200">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">데이터 기반 ROI</h3>
+                    <p class="text-slate-600 leading-relaxed mb-6">막연한 수치가 아닌, 현장 실측 데이터를 기반으로 보수적·기대·낙관적 3단계 ROI 모델을 제시하여 투명한 의사결정을 돕습니다.</p>
+                    <ul class="space-y-3 text-sm font-medium text-slate-500">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-purple-500 mr-2"></i> 실시간 클라우드 리포팅</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-purple-500 mr-2"></i> 10.5v 최신 알고리즘 탑재</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 text-slate-500 py-16 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-white font-black text-2xl tracking-tighter">NEWTOP</span>
+                        <span class="bg-blue-600/20 text-blue-400 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-400/20 uppercase">Core Tech</span>
+                    </div>
+                    <p class="text-sm max-w-sm leading-relaxed">
+                        산업용 보일러 및 엔진의 에너지 DX 진단 전문가 그룹 뉴탑입니다. <br/>
+                        데이터로 증명하고 결과로 보답하겠습니다.
+                    </p>
+                </div>
+                <div class="flex flex-col md:items-end gap-2 text-sm">
+                    <p class="text-slate-300">대표이사: 서경원 | Energy DX Strategist</p>
+                    <p>© 2026 NEWTOP. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
