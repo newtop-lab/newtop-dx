@@ -26,24 +26,31 @@
         .fuel-type-tab { padding: 6px 16px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; border: 1px solid #e2e8f0; color: #94a3b8; }
         .fuel-type-tab.active { background: #0f172a; color: white; border-color: #0f172a; }
         
-        @keyframes pump-3d { 0% { transform: translateY(40px); } 100% { transform: translateY(-10px); } }
+        /* [최적화 1] GPU 가속(translate3d)을 통한 저사양 기기 애니메이션 부하 해소 */
+        @keyframes pump-3d { 0% { transform: translate3d(0, 40px, 0); } 100% { transform: translate3d(0, -10px, 0); } }
         @keyframes shake-extreme {
-            0% { transform: translate(calc(var(--shake) * 1px), calc(var(--shake) * 1px)); }
-            25% { transform: translate(calc(var(--shake) * -1.5px), calc(var(--shake) * 1px)); }
-            50% { transform: translate(calc(var(--shake) * 1px), calc(var(--shake) * -1.5px)); }
-            75% { transform: translate(calc(var(--shake) * -1px), calc(var(--shake) * -1px)); }
-            100% { transform: translate(calc(var(--shake) * 1.5px), calc(var(--shake) * 1px)); }
+            0% { transform: translate3d(calc(var(--shake) * 1px), calc(var(--shake) * 1px), 0); }
+            25% { transform: translate3d(calc(var(--shake) * -1.5px), calc(var(--shake) * 1px), 0); }
+            50% { transform: translate3d(calc(var(--shake) * 1px), calc(var(--shake) * -1.5px), 0); }
+            75% { transform: translate3d(calc(var(--shake) * -1px), calc(var(--shake) * -1px), 0); }
+            100% { transform: translate3d(calc(var(--shake) * 1.5px), calc(var(--shake) * 1px), 0); }
         }
-        .engine-shaking { animation: shake-extreme 0.15s infinite; }
+        
+        .engine-shaking { 
+            animation: shake-extreme 0.15s infinite; 
+            will-change: transform; /* 브라우저에 렌더링 최적화 힌트 제공 */
+        }
 
         .cylinder-3d {
             box-shadow: inset 15px 0 25px rgba(0,0,0,0.7), inset -15px 0 25px rgba(0,0,0,0.7), inset 0 10px 20px rgba(0,0,0,0.8);
             border-radius: 15px 15px 30px 30px;
+            will-change: background;
         }
         .piston-3d {
             background: linear-gradient(90deg, #334155 0%, #cbd5e1 35%, #ffffff 50%, #cbd5e1 65%, #334155 100%);
             box-shadow: inset 0px -15px 25px rgba(0,0,0,0.8), 0 -5px 15px rgba(0,0,0,0.5);
             border-radius: 12px 12px 0 0;
+            will-change: transform;
         }
         .piston-head-3d {
             background: radial-gradient(ellipse at 50% 30%, #ffffff 0%, #94a3b8 40%, #1e293b 90%, #020617 100%);
@@ -55,7 +62,7 @@
             background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
             background-blend-mode: multiply;
         }
-        .heat-glow { transition: box-shadow 0.5s; }
+        .heat-glow { transition: box-shadow 0.5s; will-change: box-shadow; }
         
         .cert-font { font-family: 'Nanum Myeongjo', serif; }
         .cert-seal { position: relative; display: inline-block; width: 60px; height: 60px; border: 3px solid #dc2626; border-radius: 50%; color: #dc2626; font-weight: 900; font-size: 14px; line-height: 1.1; text-align: center; display: flex; flex-direction: column; justify-content: center; transform: rotate(-15deg); opacity: 0.85; }
@@ -560,7 +567,7 @@
                 </div>
                 <div class="bg-blue-50 border border-blue-100 p-3 rounded-lg mb-6 relative z-10 text-center shadow-sm">
                     <p class="text-[11px] font-black text-blue-800 tracking-tighter">0W-30 표준 합성유 배합 기준 실증 데이터 준용</p>
-                    <p class="text-[9px] text-blue-600 mt-1 font-bold">성적서: TSC2023-2478L  (한국석유관리원 [cite: 1]) / 시료명: RES3366 <br>초고점도지수(VI 191) , 산화안정도(0.01) , 유동점(-42.0°C)  검증 적용</p>
+                    <p class="text-[9px] text-blue-600 mt-1 font-bold">성적서: TSC2023-2478L  (한국석유관리원) / 시료명: RES3366 <br>초고점도지수(VI 191) , 산화안정도(0.01) , 유동점(-42.0°C)  검증 적용</p>
                 </div>
                 <div class="space-y-4 text-sm font-bold px-3 mb-10 relative z-10">
                     <div class="flex justify-between border-b border-slate-200 pb-2">
@@ -624,7 +631,6 @@
 
         let currentGlobalState = {}; 
 
-        // 💡 AI 공학 5단계 가치 체계 계산 모듈
         const EngineSaaS = {
             getInputs: function() {
                 const refinerEl = document.getElementById('refiner-active');
@@ -654,15 +660,13 @@
             },
 
             calcState: function(d) {
-                // 💡 [1단계] 아레니우스 법칙 (화학적 기초)
                 let arrheniusAging = Math.exp(Math.max(0, d.tempB - 85) * 0.05); 
                 let oxidationFactor = d.active ? 0.01 : 1.0; 
                 let dirtLevel = Math.max(0, Math.min(1.0, ((d.years - 1) * 0.05 + (d.hours - 1) * 0.015 + (d.delay * 0.15)) * arrheniusAging * oxidationFactor));
 
-                // 💡 [2단계] 스트라이벡 곡선 & 다르시-바이스바흐 (기계적 구동)
                 let viFactor = d.active ? 191 : 90; 
                 let stribeckFriction = (d.rpm / 2000) * (150 / viFactor); 
-                let darcyPumpingLoss = (d.rpm / 2000) * (d.active ? 0.5 : 1.5); // 기생 부하(유동 저항)
+                let darcyPumpingLoss = (d.rpm / 2000) * (d.active ? 0.5 : 1.5); 
                 
                 let frictionIndex = (dirtLevel * 12) + stribeckFriction + darcyPumpingLoss;
                 let thermalLoadIndex = Math.max(0, d.tempB - 85) * 0.08;
@@ -702,11 +706,10 @@
 
                 let currentEngineTemp = d.active ? d.tempA : d.tempB;
                 
-                // 💡 [3단계] 푸리에 열전도 법칙 & 엑서지 분석 (에너지 효율)
                 let fourierHeatBlock = state.dirtLevel * 5.0; 
                 let exhaustTemp = currentEngineTemp * 1.2 + (lambdaActual * 20) + (d.rpm * 0.03) + (fourierHeatBlock * 10);
                 let exhaustLoss = Math.max(0, (exhaustTemp - d.ambientTemp) * 0.008 * lambdaActual) + fourierHeatBlock;
-                let exergyDestruction = (state.currentLoss + fourierHeatBlock) * (d.active ? 0.1 : 1.0); // 엑서지 파괴 차단율
+                let exergyDestruction = (state.currentLoss + fourierHeatBlock) * (d.active ? 0.1 : 1.0); 
 
                 return { Cd, lambdaActual, combustionState, stateColor, tempEfficiencyLoss, exhaustLoss, fourierHeatBlock, exergyDestruction };
             },
@@ -731,7 +734,6 @@
                 let slidingDistanceA = (d.rpm / 2000) * (d.hours / 24); 
                 let kFactorAfter = d.active ? 0.05 + slidingDistanceA + (Math.max(0, d.tempA - 85) * 0.005) : state.kFactorBefore;
 
-                // 💡 [4단계] 패리스의 법칙 (구조적 신뢰성 / 피로 균열)
                 let deltaK_before = d.vibB;
                 let deltaK_after = d.vibA;
                 let parisCrackGrowth_before = Math.pow(deltaK_before, 3); 
@@ -756,7 +758,6 @@
 
                 let currentLife = Math.max(0, 15.0 - (d.years * 0.5) - (d.hours * 0.1) - (d.delay * 0.15) - (d.vibB * 1.0));
                 
-                // 💡 [5단계] 욕조 곡선 (경제적 전략 / LCC)
                 let kDrop = Math.max(0, state.kFactorBefore - rec.kFactorAfter);
                 let bathtubDelay = d.active ? (kDrop * 1.2) + (state.dirtLevel * 2.0) + (rec.crackInhibition * 2.0) : 0;
                 let lifeExtVal = bathtubDelay; 
@@ -768,7 +769,16 @@
             }
         };
 
+        // [최적화 2] 연산 부하를 줄이는 requestAnimationFrame 적용
+        let calculateFrame = null;
         function calculate() {
+            if (calculateFrame) {
+                cancelAnimationFrame(calculateFrame);
+            }
+            calculateFrame = requestAnimationFrame(runCalculations);
+        }
+
+        function runCalculations() {
             try {
                 const d = EngineSaaS.getInputs();
                 const state = EngineSaaS.calcState(d);
@@ -785,7 +795,6 @@
                 if (stateUiEl) stateUiEl.className = comb.stateColor;
                 safeSetTxt('exhaust-loss-ui', comb.exhaustLoss.toFixed(2));
 
-                // 💡 5단계 가치 체계 UI 패널 동기화
                 safeSetTxt('ui-step1', d.active ? "노화 진행 차단 (0.01%)" : `노화 가속 (${(state.arrheniusAging * 100 - 100).toFixed(1)}%)`);
                 safeSetTxt('ui-step2', d.active ? `기생부하 저감 (유체윤활)` : `마찰 부하 가중`);
                 safeSetTxt('ui-step3', d.active ? `엑서지(유효열) 보존` : `엑서지 파괴 (${comb.exergyDestruction.toFixed(1)}%)`);
@@ -877,6 +886,4 @@
                     if(dC) dC.style.borderColor = "#10b981";
                     
                     let deductionMsg = d.costType === 'sub' ? "연간 구독 유지비를 제외하고도 " : (d.costType === 'once' ? "기기 도입비를 제외하고도 " : "");
-                    safeSetHtml('diag-msg', `💡 <b>5단계 물리적 가치 체계 증명:</b> RES3366의 압도적 스펙은 화학적 산화 방지(1단계)부터 마찰/기생부하 차단(2단계), 엑서지 극대화(3단계), 균열 억제(4단계)를 거쳐 최종 LCC 최적화(5단계)를 완성합니다. ${deductionMsg}연간 <b>최대 ${Math.floor(roi.expSave).toLocaleString()}원</b>의 순이익이 보장됩니다.`);
-                } else {
-                 
+                    safeSetHtml('diag-msg', `💡 <b>5단계 물리적 가치 체계 증명:</b> RES3366의 압도
