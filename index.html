@@ -43,7 +43,7 @@
         /* 무한 스크롤 애니메이션 */
         .scrolling-wrapper { overflow: hidden; white-space: nowrap; position: relative; background: #020617; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 15px 0; }
         .scrolling-content { display: inline-block; animation: scroll 30s linear infinite; }
-        .scrolling-item { display: inline-flex; items-center; gap: 0.5rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 2rem; font-size: 0.875rem; }
+        .scrolling-item { display: inline-flex; align-items: center; gap: 0.5rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 2rem; font-size: 0.875rem; }
         .scrolling-item i { color: #8b5cf6; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         
@@ -71,7 +71,8 @@
                 <div class="hidden md:flex gap-8 items-center text-sm font-bold">
                     <a href="#mechanism" class="text-slate-600 hover:text-purple-600 transition-colors">작동 원리</a>
                     <a href="#performance" class="text-slate-600 hover:text-purple-600 transition-colors">공인 데이터</a>
-                    <a href="뉴탑5.3.html" class="px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-purple-700 transition-all shadow-md flex items-center gap-2">
+                    <a href="#value-chain" class="text-slate-600 hover:text-purple-600 transition-colors">5대 가치 체계</a>
+                    <a href="뉴탑5.6.html" class="px-6 py-2.5 rounded-full bg-slate-900 text-white hover:bg-purple-700 transition-all shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-microchip"></i> DX 진단기 실행
                     </a>
                 </div>
@@ -89,13 +90,13 @@
             <span class="gradient-text">마찰 제로의 혁신</span>
         </h1>
         
-        <p class="max-w-2xl mx-auto text-lg text-slate-300 mb-12 leading-relaxed">
-            표준 합성유(0W-30) 기반 KPetro 공인 실증 완료.<br/>
-            어떤 가혹한 환경에서도 기계적 부하를 낮춰 에너지 비용을 획기적으로 절감합니다.
-        </p>
+        <p class="max-w-3xl mx-auto text-lg text-slate-300 mb-12 leading-relaxed">
+    KPetro가 공인한 0W-30 실증 데이터 기반의 초격차 기술력으로<br/>
+    극한의 부하를 수익으로 전환하는 에너지 DX의 새로운 기준을 제시합니다.
+</p>
         
         <div class="flex flex-col sm:flex-row gap-4 mb-20 relative z-20">
-            <a href="뉴탑5.3.html" class="px-10 py-5 bg-purple-600 rounded-xl text-lg font-bold hover:bg-purple-500 transition-all shadow-[0_15px_30px_rgba(147,51,234,0.4)] flex items-center justify-center">
+            <a href="뉴탑5.6.html" class="px-10 py-5 bg-purple-600 rounded-xl text-lg font-bold hover:bg-purple-500 transition-all shadow-[0_15px_30px_rgba(147,51,234,0.4)] flex items-center justify-center">
                 <i class="fa-solid fa-bolt mr-3 text-yellow-300"></i> 무료 AI 효율 진단
             </a>
             <a href="#performance" class="px-10 py-5 bg-white/5 border border-white/15 rounded-xl text-lg font-bold hover:bg-white/10 transition-all flex items-center justify-center">
@@ -115,10 +116,10 @@
             <a href="#performance" class="glass-card p-8 rounded-3xl text-left block border-blue-500/20 hover:border-blue-500/50">
                 <div class="flex justify-between items-start mb-4">
                     <i class="fa-solid fa-flask-vial text-blue-400 text-3xl"></i>
-                    <span class="text-[10px] bg-blue-500/20 text-blue-300 font-bold px-2 py-1 rounded border border-blue-500/30">한국석유관리원</span>
+                    <span class="text-[10px] bg-blue-500/20 text-blue-300 font-bold px-2 py-1 rounded border border-blue-500/30">한국석유관리원 [cite: 1]</span>
                 </div>
-                <div class="text-xl font-bold mb-2 text-white">0W-30 가혹조건 실증</div>
-                <p class="text-slate-400 text-sm leading-relaxed">점도지수 191, 산화안정도 0.01 미만 달성. 오일 수명을 극대화하는 압도적 물성 입증</p>
+                <div class="text-xl font-bold mb-2 text-white">0W-30 가혹조건 실증 [cite: 30]</div>
+                <p class="text-slate-400 text-sm leading-relaxed">점도지수 191, 산화안정도 0.01 미만 달성. 오일 수명을 극대화하는 압도적 물성 입증 </p>
             </a>
             <a href="#performance" class="glass-card p-8 rounded-3xl text-left block border-emerald-500/20 hover:border-emerald-500/50">
                 <div class="flex justify-between items-start mb-4">
@@ -172,7 +173,7 @@
         </div>
     </section>
 
-    <section id="performance" class="py-24 bg-white relative overflow-hidden">
+    <section id="performance" class="py-24 bg-white relative overflow-hidden border-b border-slate-100">
         <div class="absolute top-0 right-0 w-1/2 h-full bg-slate-50 -skew-x-12 transform translate-x-32 z-0"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -183,15 +184,15 @@
                 </p>
                 <p class="text-slate-500 max-w-2xl mx-auto leading-relaxed">
                     본 데이터는 가장 가혹하고 유막이 깨지기 쉬운 <b>0W-30 표준 합성유</b>에 <b>RES3366 기술을 배합</b>하여<br>
-                    한국석유관리원(KPetro)으로부터 공식 검증받은 <b>초격차 기술력의 증거</b>입니다.
+                    한국석유관리원(KPetro)으로부터 공식 검증받은 <b>초격차 기술력의 증거</b>입니다[cite: 1, 30].
                 </p>
             </div>
 
-            <div class="bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-2xl border-4 border-slate-800 text-white">
+            <div class="bg-slate-900 rounded-[2.5rem] p-8 md:p-12 shadow-2xl border-4 border-slate-800 text-white mb-16">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-slate-700 pb-6 gap-4">
                     <div>
                         <div class="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 text-[10px] font-bold px-3 py-1 rounded uppercase tracking-widest border border-blue-500/30 mb-3">
-                            <i class="fa-solid fa-certificate"></i> KPetro Report No. TSC2023-2478L
+                            <i class="fa-solid fa-certificate"></i> KPetro Report No. TSC2023-2478L [cite: 29]
                         </div>
                         <h3 class="text-2xl font-black">RES3366 공학적 마진 분석</h3>
                     </div>
@@ -205,7 +206,7 @@
                     <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:bg-slate-800 transition-colors">
                         <p class="text-[11px] text-purple-400 font-bold uppercase tracking-widest mb-2">점도지수 (Viscosity Index)</p>
                         <div class="flex items-end gap-2 mb-3">
-                            <p class="text-4xl font-black text-white leading-none">191</p>
+                            <p class="text-4xl font-black text-white leading-none">191 </p>
                             <span class="text-slate-400 text-xs font-bold mb-1">VI</span>
                         </div>
                         <p class="text-sm font-bold text-emerald-400 mb-1">고온 환경 유막 유지력 극대화</p>
@@ -215,7 +216,7 @@
                     <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:bg-slate-800 transition-colors">
                         <p class="text-[11px] text-purple-400 font-bold uppercase tracking-widest mb-2">산화안정도 (전산가 증가)</p>
                         <div class="flex items-end gap-2 mb-3">
-                            <p class="text-4xl font-black text-white leading-none">0.01<span class="text-2xl text-slate-300">↓</span></p>
+                            <p class="text-4xl font-black text-white leading-none">0.01<span class="text-2xl text-slate-300">↓</span> </p>
                             <span class="text-slate-400 text-xs font-bold mb-1">mg KOH/g</span>
                         </div>
                         <p class="text-sm font-bold text-emerald-400 mb-1">오일 장기 수명 및 슬러지 원천 차단</p>
@@ -225,8 +226,8 @@
                     <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:bg-slate-800 transition-colors">
                         <p class="text-[11px] text-blue-400 font-bold uppercase tracking-widest mb-2">유동점 및 저온점도</p>
                         <div class="flex items-end gap-2 mb-3">
-                            <p class="text-4xl font-black text-white leading-none">-42</p>
-                            <span class="text-slate-400 text-xs font-bold mb-1">°C (7710 mPa·s)</span>
+                            <p class="text-4xl font-black text-white leading-none">-42 </p>
+                            <span class="text-slate-400 text-xs font-bold mb-1">°C (7710 mPa·s) </span>
                         </div>
                         <p class="text-sm font-bold text-emerald-400 mb-1">초기 시동(Cold Start) 부하 완벽 제거</p>
                         <p class="text-xs text-slate-400 leading-relaxed">기계 마모의 70%는 초기 시동 시 발생합니다. 영하 42도에서도 얼지 않는 완벽한 저온 유동성은 <b>추운 겨울철에도 시동 즉시 윤활 작용을 시작하여 마모를 원천 방어</b>합니다.</p>
@@ -235,8 +236,8 @@
                     <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:bg-slate-800 transition-colors lg:col-span-1">
                         <p class="text-[11px] text-red-400 font-bold uppercase tracking-widest mb-2">인화점 (Flash Point)</p>
                         <div class="flex items-end gap-2 mb-3">
-                            <p class="text-4xl font-black text-white leading-none">234</p>
-                            <span class="text-slate-400 text-xs font-bold mb-1">°C</span>
+                            <p class="text-4xl font-black text-white leading-none">234 </p>
+                            <span class="text-slate-400 text-xs font-bold mb-1">°C </span>
                         </div>
                         <p class="text-sm font-bold text-emerald-400 mb-1">고열 환경 증발 및 오일 소모 억제</p>
                         <p class="text-xs text-slate-400 leading-relaxed">234도의 높은 인화점은 고RPM 및 고부하 작업 시 발생하는 극심한 열에도 <b>오일이 증발하거나 타버리지 않는 강력한 내열성</b>을 의미합니다.</p>
@@ -264,11 +265,158 @@
         </div>
     </section>
 
+    <section id="value-chain" class="py-24 bg-slate-900 text-white relative overflow-hidden border-b border-slate-800">
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-50"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-sm font-bold text-emerald-400 uppercase tracking-[0.3em] mb-4">Physics-Based Value Chain</h2>
+                <p class="text-3xl md:text-4xl font-black text-white mb-6">뉴탑 에너지 DX: 5단계 물리적 가치 체계</p>
+                <p class="text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                    단순한 오일 교환이 아닙니다. KPetro에서 입증된 화학적 데이터가 장비 내부에서<br>
+                    어떻게 경제적 수익(ROI)으로 변환되는지 <b>7대 공학 법칙</b>으로 증명합니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-slate-800 -translate-y-1/2 z-0"></div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 relative z-10 flex flex-col items-center text-center transform transition duration-500 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(251,191,36,0.2)] hover:border-amber-500/50 group">
+                    <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center text-xl font-black mb-4 border border-amber-500/30 group-hover:scale-110 transition-transform">1</div>
+                    <span class="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-1">화학적 기초</span>
+                    <h3 class="text-lg font-bold text-white mb-2">산화 방지 및 청정성</h3>
+                    <p class="text-xs text-slate-400 font-bold mb-3 bg-slate-900/50 px-2 py-1 rounded">아레니우스 법칙</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">산화 반응의 활성화 에너지($E_a$)를 억제하여 고온에서도 슬러지 발생을 제로화합니다.</p>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 relative z-10 flex flex-col items-center text-center transform transition duration-500 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(56,189,248,0.2)] hover:border-blue-500/50 group">
+                    <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-xl font-black mb-4 border border-blue-500/30 group-hover:scale-110 transition-transform">2</div>
+                    <span class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-1">기계적 구동</span>
+                    <h3 class="text-lg font-bold text-white mb-2">기생 부하 차단</h3>
+                    <p class="text-xs text-slate-400 font-bold mb-3 bg-slate-900/50 px-2 py-1 rounded">스트라이벡 / 다르시</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">유체 윤활을 고정하고 유동 저항($\Delta P$)을 줄여, 전류 10.2% 감소를 실현합니다.</p>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 relative z-10 flex flex-col items-center text-center transform transition duration-500 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(52,211,153,0.2)] hover:border-emerald-500/50 group">
+                    <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-xl font-black mb-4 border border-emerald-500/30 group-hover:scale-110 transition-transform">3</div>
+                    <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest mb-1">에너지 효율</span>
+                    <h3 class="text-lg font-bold text-white mb-2">가용 에너지 극대화</h3>
+                    <p class="text-xs text-slate-400 font-bold mb-3 bg-slate-900/50 px-2 py-1 rounded">푸리에 / 엑서지</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">슬러지 단열막을 제거하여 열교환율($k$)을 복원하고 버려지는 열을 에너지로 전환합니다.</p>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 relative z-10 flex flex-col items-center text-center transform transition duration-500 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(167,139,250,0.2)] hover:border-purple-500/50 group">
+                    <div class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center text-xl font-black mb-4 border border-purple-500/30 group-hover:scale-110 transition-transform">4</div>
+                    <span class="text-[10px] text-purple-400 font-bold uppercase tracking-widest mb-1">구조적 신뢰성</span>
+                    <h3 class="text-lg font-bold text-white mb-2">피로 누적 억제</h3>
+                    <p class="text-xs text-slate-400 font-bold mb-3 bg-slate-900/50 px-2 py-1 rounded">패리스의 법칙</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">충격 응력($\Delta K$)을 낮추어 미세 균열 성장을 막고 장비 파손을 예방합니다.</p>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 relative z-10 flex flex-col items-center text-center transform transition duration-500 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(244,63,94,0.2)] hover:border-rose-500/50 group">
+                    <div class="w-12 h-12 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center text-xl font-black mb-4 border border-rose-500/30 group-hover:scale-110 transition-transform">5</div>
+                    <span class="text-[10px] text-rose-400 font-bold uppercase tracking-widest mb-1">경제적 전략</span>
+                    <h3 class="text-lg font-bold text-white mb-2">LCC 최적화 (ROI)</h3>
+                    <p class="text-xs text-slate-400 font-bold mb-3 bg-slate-900/50 px-2 py-1 rounded">욕조 곡선</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">마모 고장기의 시작을 뒤로 미루어 설비 교체 주기 연장 및 OPEX를 획기적으로 낮춥니다.</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="inline-block bg-slate-800/80 text-emerald-300 px-6 py-3 rounded-full text-sm font-black border border-slate-700/50 shadow-inner">
+                    "안 변하는 기름이(1) ➔ 부하를 줄여서(2) ➔ 열을 잘 전달하고(3) ➔ 기계 병을 막아주니(4) ➔ 돈이 된다(5)!"
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="py-24 bg-slate-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h3 class="text-2xl md:text-3xl font-black text-slate-900">시중 프리미엄 제품군 비교</h3>
+                <p class="text-slate-500 mt-2 text-sm font-bold">오직 KPetro 공인 성적서 데이터 수치만으로 증명하는 압도적 기술 격차</p>
+            </div>
+
+            <div class="overflow-x-auto rounded-3xl border border-slate-200 shadow-xl bg-white">
+                <table class="w-full min-w-[600px] text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-widest border-b border-slate-200">
+                            <th class="p-6 font-black w-1/4">평가 항목 (KPetro 기준)</th>
+                            <th class="p-6 font-bold text-center border-l border-slate-100">일반 윤활제<br><span class="text-[10px] font-normal mt-1 block">범용 베이스</span></th>
+                            <th class="p-6 font-bold text-center border-l border-slate-100">수입 A사 첨가제<br><span class="text-[10px] font-normal mt-1 block">고가 마케팅 위주</span></th>
+                            <th class="p-6 font-black text-center border-x-4 border-t-4 border-emerald-500 bg-emerald-50/30 text-emerald-700 w-1/3 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/10 to-transparent z-0"></div>
+                                <span class="relative z-10 text-lg block mb-1">NEWTOP DX (RES3366)</span>
+                                <span class="relative z-10 text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">0W-30 실증 기준</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm font-bold text-slate-700">
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                            <td class="p-6">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-temperature-arrow-up text-purple-400"></i> 점도지수 (VI)
+                                    <span class="text-[10px] text-slate-400 font-normal block w-full">고온 유막 유지력 (높을수록 우수)</span>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center text-slate-400">100 ~ 130 내외</td>
+                            <td class="p-6 text-center text-slate-500">150 ~ 160 내외</td>
+                            <td class="p-6 text-center text-2xl font-black text-emerald-600 border-x-4 border-emerald-500 bg-emerald-50/30">191</td>
+                        </tr>
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                            <td class="p-6">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-vial-circle-check text-blue-400"></i> 산화안정도 (전산가 증분)
+                                    <span class="text-[10px] text-slate-400 font-normal block w-full">오일 부패/슬러지화 (낮을수록 우수)</span>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center text-slate-400">기준 초과 잦음</td>
+                            <td class="p-6 text-center text-slate-500">0.5 ~ 1.0 수준</td>
+                            <td class="p-6 text-center text-xl font-black text-emerald-600 border-x-4 border-emerald-500 bg-emerald-50/30">0.01 미만</td>
+                        </tr>
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                            <td class="p-6">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-snowflake text-cyan-400"></i> 저온 유동점 (°C)
+                                    <span class="text-[10px] text-slate-400 font-normal block w-full">겨울철 시동 부하 (낮을수록 우수)</span>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center text-slate-400">-15 ~ -25°C</td>
+                            <td class="p-6 text-center text-slate-500">-30 ~ -35°C</td>
+                            <td class="p-6 text-center text-xl font-black text-emerald-600 border-x-4 border-emerald-500 bg-emerald-50/30">-42.0°C</td>
+                        </tr>
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                            <td class="p-6">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-fire-flame-curved text-red-400"></i> 인화점 (°C)
+                                    <span class="text-[10px] text-slate-400 font-normal block w-full">고열 증발 억제력 (높을수록 우수)</span>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center text-slate-400">200 ~ 210°C</td>
+                            <td class="p-6 text-center text-slate-500">210 ~ 220°C</td>
+                            <td class="p-6 text-center text-xl font-black text-emerald-600 border-x-4 border-emerald-500 bg-emerald-50/30">234.0°C</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-spray-can-sparkles text-amber-500"></i> 래커(Lacquer) 부착
+                                    <span class="text-[10px] text-slate-400 font-normal block w-full">엔진 내부 찌든 때 발생 여부</span>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center text-slate-400">보통 ~ 심함</td>
+                            <td class="p-6 text-center text-slate-500">적음</td>
+                            <td class="p-6 text-center text-lg font-black text-emerald-600 border-x-4 border-b-4 border-emerald-500 bg-emerald-50/30 rounded-b-xl">부착 없음 (Zero)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <section class="py-24 bg-slate-900 text-white">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="text-3xl md:text-5xl font-black mb-8">우리 공장의 낭비되는 에너지,<br>지금 데이터로 확인해 보세요.</h2>
             <p class="text-slate-400 mb-10 text-lg">0W-30 가혹 조건 실증 데이터 기반의 AI 예측 모델로<br>장비 상태에 맞춘 최적의 ROI를 1분 안에 산출해 드립니다.</p>
-            <a href="뉴탑5.3.html" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-lg font-black hover:scale-105 transition-transform shadow-[0_10px_30px_rgba(147,51,234,0.3)]">
+            <a href="뉴탑5.6.html" class="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-lg font-black hover:scale-105 transition-transform shadow-[0_10px_30px_rgba(147,51,234,0.3)]">
                 <i class="fa-solid fa-desktop"></i> NEWTOP DX 진단기 실행하기
             </a>
         </div>

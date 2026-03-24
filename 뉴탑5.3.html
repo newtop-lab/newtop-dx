@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEWTOP 에너지 DX 진단기 - v5.0 (Archard's Law & Combustion Edition)</title>
+    <title>NEWTOP 기후테크 에너지 DX 진단기 - v7.0 (5-Step Value Chain Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
@@ -112,12 +112,12 @@
         <div class="p-4 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-y-auto">
             <div class="space-y-6">
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-sm">
-                    <div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded tracking-widest shrink-0 mt-1">0W-30 기반 실증 모델</div>
+                    <div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded tracking-widest shrink-0 mt-1">기후테크 실증 모델</div>
                     <div class="text-[10px] font-bold text-slate-600 tracking-tight leading-relaxed">
                         1. 마찰부하 실증: 국제종합기계 전류 10.2% 감소 (256A→230A)<br>
                         2. 0W-30 가혹 실증: <span class="text-blue-600 font-black">초고점도지수 191, 산화안정도 0.01 미만</span><br>
                         3. 저온 가동성: <span class="text-blue-600 font-black">유동점 -42.0℃ 확보 (초기 부하 저감)</span><br>
-                        ※ <strong class="text-blue-700">0W-30 표준 합성유의 공인 물성 데이터를 현장 실측값과 결합한 DX 시스템</strong>
+                        ※ <strong class="text-blue-700">공인 물성 데이터를 5대 물리 법칙 수식과 결합한 디지털 트윈 DX 시스템</strong>
                     </div>
                 </div>
 
@@ -328,9 +328,9 @@
                             <div class="flex justify-between items-center mb-1">
                                 <p class="text-[10px] font-bold opacity-80 uppercase">연간 예상 순이익 (ROI)</p>
                                 <select id="cost-type" onchange="calculate()" class="bg-emerald-900/50 border border-emerald-400/30 rounded text-[9px] px-1.5 py-0.5 text-white outline-none cursor-pointer font-bold">
+                                    <option value="none" selected>공제 안 함</option>
                                     <option value="sub">구독형 공제 (71만)</option>
                                     <option value="once">1회성 공제 (35만)</option>
-                                    <option value="none">공제 안 함</option>
                                 </select>
                             </div>
                             <div class="flex items-baseline gap-2 mt-1">
@@ -348,7 +348,7 @@
 
                 <div class="bg-white rounded-[2.5rem] p-8 border-2 border-slate-900 shadow-xl flex-grow flex flex-col relative">
                     <div class="absolute -top-4 right-8 bg-blue-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg border-2 border-white">
-                        0W-30 가혹 조건 실증 AI 예측 모델
+                        기후테크 7대 물리법칙 실시간 AI 예측 모델
                     </div>
 
                     <div class="flex justify-between items-end pb-4 border-b-4 border-slate-900 mt-2 relative">
@@ -376,32 +376,56 @@
                                 <p class="text-sm font-black"><span id="combustion-state-ui" class="text-emerald-400">정상</span></p>
                             </div>
                             <div class="bg-slate-800 p-2 rounded-xl border border-slate-600">
-                                <p class="text-[9px] text-slate-400 font-bold mb-1">추가 배기 손실</p>
+                                <p class="text-[9px] text-slate-400 font-bold mb-1">총 배기 방열손실</p>
                                 <p class="text-sm font-black text-red-400"><span id="exhaust-loss-ui">0.0</span>%</p>
                             </div>
                         </div>
-                        <p class="text-[9px] text-slate-400 mt-3 leading-relaxed font-bold">
-                            * 본 수치는 <b>'외기 온도', '가동 RPM', '엔진 온도'</b> 변화를 연소 방정식에 실시간으로 대입하여 도출되는 <b>동적 모델링 결과</b>입니다.
-                        </p>
                     </div>
 
                     <div class="mt-4 p-5 bg-slate-900 border border-slate-700 rounded-2xl shadow-inner text-white relative overflow-hidden">
-                        <div class="absolute right-2 top-2 opacity-5 text-7xl font-serif italic pointer-events-none">K</div>
-                        <p class="text-[10px] font-black text-emerald-400 mb-3 uppercase tracking-widest">⚙️ 아처드 마모 법칙 (Archard's Wear Law) 분석</p>
+                        <div class="absolute right-2 top-2 opacity-5 text-7xl font-serif italic pointer-events-none">Φ</div>
+                        <p class="text-[10px] font-black text-emerald-400 mb-3 uppercase tracking-widest">⚙️ 뉴탑 에너지 DX: 5단계 물리적 가치 체계 (Digital Twin)</p>
                         
-                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-3">
-                            <div class="w-2/5">
-                                <p class="text-[9px] text-slate-400 font-bold mb-1 text-center">현재 장비 마모 계수(K)</p>
-                                <p class="text-2xl font-black text-red-400 text-center" id="k-factor-before">1.52</p>
+                        <div class="space-y-2 mb-3">
+                            <div class="flex justify-between items-center bg-slate-800/50 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="text-[9px] font-black text-amber-400">1. 화학적 기초 <span class="text-slate-400 font-normal ml-1">아레니우스</span></p>
+                                    <p class="text-[8px] text-slate-500">산화(Ea) 억제로 청정도 유지</p>
+                                </div>
+                                <div id="ui-step1" class="text-[10px] font-black text-right"></div>
                             </div>
-                            <div class="text-center text-slate-500 font-black px-2">▶</div>
-                            <div class="w-2/5">
-                                <p class="text-[9px] text-slate-400 font-bold mb-1 text-center">NEWTOP DX 적용 후</p>
-                                <p class="text-2xl font-black text-emerald-400 text-center animate-pulse" id="k-factor-after">0.05</p>
+                            <div class="flex justify-between items-center bg-slate-800/50 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="text-[9px] font-black text-blue-400">2. 기계적 구동 <span class="text-slate-400 font-normal ml-1">스트라이벡 & 다르시</span></p>
+                                    <p class="text-[8px] text-slate-500">유체윤활 및 펌핑 기생부하 차단</p>
+                                </div>
+                                <div id="ui-step2" class="text-[10px] font-black text-right"></div>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-800/50 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="text-[9px] font-black text-red-400">3. 에너지 효율 <span class="text-slate-400 font-normal ml-1">푸리에 & 엑서지</span></p>
+                                    <p class="text-[8px] text-slate-500">열교환 복원 및 가용에너지 극대화</p>
+                                </div>
+                                <div id="ui-step3" class="text-[10px] font-black text-right"></div>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-800/50 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="text-[9px] font-black text-emerald-400">4. 구조적 신뢰성 <span class="text-slate-400 font-normal ml-1">패리스 법칙</span></p>
+                                    <p class="text-[8px] text-slate-500">응력(ΔK) 감소로 피로균열 억제</p>
+                                </div>
+                                <div id="ui-step4" class="text-[10px] font-black text-right"></div>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-800/50 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="text-[9px] font-black text-indigo-400">5. 경제적 전략 <span class="text-slate-400 font-normal ml-1">욕조 곡선 (LCC)</span></p>
+                                    <p class="text-[8px] text-slate-500">마모고장 지연으로 생애주기 최적화</p>
+                                </div>
+                                <div id="ui-step5" class="text-[10px] font-black text-right"></div>
                             </div>
                         </div>
-                        <p class="text-[9px] text-slate-400 leading-relaxed font-bold break-keep">
-                            * 0W-30 가혹 조건에서 실증된 <b>초고점도지수(VI 191)</b> 및 <b>산화안정도(0.01 미만)</b>가 고온/고부하(RPM, 가동시간) 환경의 금속 직접 접촉을 차단하여, <b>마모 계수(K)를 기하급수적으로 낮춥니다.</b>
+
+                        <p class="text-[10px] text-emerald-300 leading-relaxed font-black bg-emerald-900/30 p-2 rounded border border-emerald-800/50 text-center">
+                            "안 변하는 기름이(1) ➔ 부하를 줄여서(2) ➔ 열을 잘 전달하고(3) ➔ 기계 병을 막아주니(4) ➔ 돈이 된다(5)!"
                         </p>
                     </div>
 
@@ -431,7 +455,7 @@
                             <p class="text-lg font-black text-indigo-600 italic">-<span id="noise-red">0.0</span><span class="text-[10px] ml-0.5">dB</span></p>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center flex flex-col justify-center">
-                            <p class="text-[9px] font-black text-slate-500 mb-1 leading-tight">수명 개선 (K값 반영)</p>
+                            <p class="text-[9px] font-black text-slate-500 mb-1 leading-tight">수명 개선 (욕조곡선)</p>
                             <p class="text-lg font-black text-emerald-600 italic">+<span id="life-text-ext">0.0</span><span class="text-[10px] ml-0.5">년</span></p>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center flex flex-col justify-center">
@@ -448,7 +472,7 @@
                         </div>
                         <div id="tree-visual-box" class="flex flex-wrap gap-1.5 justify-center bg-white p-4 rounded-xl border border-emerald-100 min-h-[70px] items-center shadow-inner relative z-10"></div>
                         <p class="text-center text-[10px] font-bold text-emerald-600 mt-3 relative z-10" id="tree-text-desc">소나무 0그루 식재 효과 (환경부 기준 연 6.6kg/그루)</p>
-                        <p class="text-[9px] font-bold text-emerald-500/70 text-center mt-1 relative z-10">* 경유 CO2 환산계수 (2.64kg/L) 적용</p>
+                        <p class="text-[9px] font-bold text-emerald-500/70 text-center mt-1 relative z-10">* 기후테크 탄소 회계: 경유 CO2 환산계수 (2.64kg/L) 적용</p>
                     </div>
 
                     <div class="mt-auto pt-4">
@@ -536,7 +560,7 @@
                 </div>
                 <div class="bg-blue-50 border border-blue-100 p-3 rounded-lg mb-6 relative z-10 text-center shadow-sm">
                     <p class="text-[11px] font-black text-blue-800 tracking-tighter">0W-30 표준 합성유 배합 기준 실증 데이터 준용</p>
-                    <p class="text-[9px] text-blue-600 mt-1 font-bold">성적서: TSC2023-2478L (한국석유관리원) / 시료명: RES3366<br>초고점도지수(VI 191), 산화안정도(0.01), 유동점(-42.0°C) 검증 적용</p>
+                    <p class="text-[9px] text-blue-600 mt-1 font-bold">성적서: TSC2023-2478L  (한국석유관리원 [cite: 1]) / 시료명: RES3366 <br>초고점도지수(VI 191) , 산화안정도(0.01) , 유동점(-42.0°C)  검증 적용</p>
                 </div>
                 <div class="space-y-4 text-sm font-bold px-3 mb-10 relative z-10">
                     <div class="flex justify-between border-b border-slate-200 pb-2">
@@ -544,7 +568,7 @@
                         <span id="cert-recovery" class="text-emerald-700 font-black text-lg"></span>
                     </div>
                     <div class="flex justify-between border-b border-slate-200 pb-2">
-                        <span class="text-slate-600">상대적 수명 개선 추정치 (K값 연동)</span>
+                        <span class="text-slate-600">상대적 수명 개선 추정치 (욕조곡선)</span>
                         <span id="cert-life" class="text-emerald-700 font-black text-lg"></span>
                     </div>
                     <div class="flex justify-between border-b border-slate-200 pb-2">
@@ -583,10 +607,8 @@
     </div>
 
     <script>
-        // ★ 구글 시트 웹앱 URL 연동 ★
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzvFRwyW35Tb5My5j3TaUYmxNpAdtYOtvNglqn0KjKD_m5gm-0NYp8cD6Dk6Qvs2Amy8Q/exec"; 
 
-        // 안정성을 높인 DOM 조작 유틸리티
         const safeSetTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
         const safeSetHtml = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
         const safeSetStyle = (id, prop, val) => { 
@@ -602,7 +624,7 @@
 
         let currentGlobalState = {}; 
 
-        // 1. 💡 AI 공학 계산 모듈 (아처드 마모 법칙 & 연소 모델 연동 완벽 반영)
+        // 💡 AI 공학 5단계 가치 체계 계산 모듈
         const EngineSaaS = {
             getInputs: function() {
                 const refinerEl = document.getElementById('refiner-active');
@@ -626,14 +648,23 @@
                     delay: safeGetVal('delay', 0),
                     active: refinerEl ? refinerEl.checked : true,
                     calcMode: modeEl ? modeEl.value : 'standard',
-                    costType: costTypeEl ? costTypeEl.value : 'sub',
+                    costType: costTypeEl ? costTypeEl.value : 'none',
                     ambientTemp: safeGetVal('ambient-temp', 20)
                 };
             },
 
             calcState: function(d) {
-                let dirtLevel = Math.max(0, Math.min(1.0, (d.years - 1) * 0.05 + (d.hours - 1) * 0.015 + (d.delay * 0.15)));
-                let frictionIndex = (dirtLevel * 12) + (d.rpm / 2000) * 1.5;
+                // 💡 [1단계] 아레니우스 법칙 (화학적 기초)
+                let arrheniusAging = Math.exp(Math.max(0, d.tempB - 85) * 0.05); 
+                let oxidationFactor = d.active ? 0.01 : 1.0; 
+                let dirtLevel = Math.max(0, Math.min(1.0, ((d.years - 1) * 0.05 + (d.hours - 1) * 0.015 + (d.delay * 0.15)) * arrheniusAging * oxidationFactor));
+
+                // 💡 [2단계] 스트라이벡 곡선 & 다르시-바이스바흐 (기계적 구동)
+                let viFactor = d.active ? 191 : 90; 
+                let stribeckFriction = (d.rpm / 2000) * (150 / viFactor); 
+                let darcyPumpingLoss = (d.rpm / 2000) * (d.active ? 0.5 : 1.5); // 기생 부하(유동 저항)
+                
+                let frictionIndex = (dirtLevel * 12) + stribeckFriction + darcyPumpingLoss;
                 let thermalLoadIndex = Math.max(0, d.tempB - 85) * 0.08;
                 let mechanicalStressIndex = (d.vibB * 2.5) + Math.max(0, d.noiseB - 75) * 0.05;
                 
@@ -649,21 +680,18 @@
                 if (d.vibB > 1.0) aiMsgs.push("⚠️ 베어링 및 마운트 마모가 의심됩니다.");
                 if (d.tempB > 95) aiMsgs.push("⚠️ 과열로 인한 오일 점도 파괴 위험이 큽니다.");
 
-                // 💡 [수정] 아처드 법칙 기준 현재 K값 산출 (RPM, 가동시간, 노후도, 온도, 진동 모두 연동)
-                let slidingDistanceProxy = (d.rpm / 1000) * (d.hours / 10);
-                let kFactorBefore = 1.0 + (d.years * 0.1) + slidingDistanceProxy + (Math.max(0, d.tempB - 85) * 0.05) + (d.delay * 0.2) + (d.vibB * 0.5);
+                let kFactorBefore = 1.0 + (d.years * 0.1) + ((d.rpm / 1000) * (d.hours / 10)) + (Math.max(0, d.tempB - 85) * 0.05) + (d.delay * 0.2) + (d.vibB * 0.5);
 
-                return { currentLoss, dirtLevel, grade, gradeColor, aiMsgs, kFactorBefore };
+                return { currentLoss, dirtLevel, grade, gradeColor, aiMsgs, kFactorBefore, arrheniusAging, oxidationFactor, stribeckFriction, darcyPumpingLoss };
             },
 
-            calcCombustion: function(d) {
+            calcCombustion: function(d, state) {
                 let Tref = 20;
                 let k = d.calcMode === 'safe' ? 0.05 : (d.calcMode === 'standard' ? 0.03 : 0.01);
                 
                 let Cd = (273.15 + Tref) / (273.15 + d.ambientTemp);
                 let tempEfficiencyLoss = k * (d.ambientTemp - Tref);
 
-                // 💡 [수정] RPM과 가동 시간에 비례하여 과잉공기비 변동
                 let lambdaBase = 1.1 + (d.rpm / 10000) + (d.hours / 100); 
                 let lambdaActual = Math.max(0.9, lambdaBase * Cd);
 
@@ -672,12 +700,15 @@
                 if (lambdaActual < 1.0) { combustionState = "불완전 연소 위험"; stateColor = "text-red-500"; }
                 else if (lambdaActual > 1.4) { combustionState = "과잉 공기 손실"; stateColor = "text-amber-500"; }
 
-                // 💡 [수정] 실시간 엔진 온도와 RPM에 따른 배기 온도 추정치 산출
                 let currentEngineTemp = d.active ? d.tempA : d.tempB;
-                let exhaustTemp = currentEngineTemp * 1.2 + (lambdaActual * 20) + (d.rpm * 0.03);
-                let exhaustLoss = Math.max(0, (exhaustTemp - d.ambientTemp) * 0.008 * lambdaActual);
+                
+                // 💡 [3단계] 푸리에 열전도 법칙 & 엑서지 분석 (에너지 효율)
+                let fourierHeatBlock = state.dirtLevel * 5.0; 
+                let exhaustTemp = currentEngineTemp * 1.2 + (lambdaActual * 20) + (d.rpm * 0.03) + (fourierHeatBlock * 10);
+                let exhaustLoss = Math.max(0, (exhaustTemp - d.ambientTemp) * 0.008 * lambdaActual) + fourierHeatBlock;
+                let exergyDestruction = (state.currentLoss + fourierHeatBlock) * (d.active ? 0.1 : 1.0); // 엑서지 파괴 차단율
 
-                return { Cd, lambdaActual, combustionState, stateColor, tempEfficiencyLoss, exhaustLoss };
+                return { Cd, lambdaActual, combustionState, stateColor, tempEfficiencyLoss, exhaustLoss, fourierHeatBlock, exergyDestruction };
             },
 
             calcRecovery: function(d, state, comb) {
@@ -697,11 +728,17 @@
                 recoveryRate = Math.max(0, Math.min(recoveryRate, totalLoss - 3.5));
                 let finalLoss = d.active ? (totalLoss - recoveryRate) : totalLoss;
 
-                // 💡 [수정] 아처드 법칙 방어 적용 (RPM, 온도 등 부하에 따라 K값이 미세하게 반응하지만 0.05선 방어)
                 let slidingDistanceA = (d.rpm / 2000) * (d.hours / 24); 
                 let kFactorAfter = d.active ? 0.05 + slidingDistanceA + (Math.max(0, d.tempA - 85) * 0.005) : state.kFactorBefore;
 
-                return { electricalEfficiency, tempDiff, vibDiff, noiseDiff, recoveryRate, finalLoss, tempCorrectionFactor, kFactorAfter };
+                // 💡 [4단계] 패리스의 법칙 (구조적 신뢰성 / 피로 균열)
+                let deltaK_before = d.vibB;
+                let deltaK_after = d.vibA;
+                let parisCrackGrowth_before = Math.pow(deltaK_before, 3); 
+                let parisCrackGrowth_after = Math.pow(deltaK_after, 3);
+                let crackInhibition = d.active ? Math.max(0, parisCrackGrowth_before - parisCrackGrowth_after) : 0;
+
+                return { electricalEfficiency, tempDiff, vibDiff, noiseDiff, recoveryRate, finalLoss, tempCorrectionFactor, kFactorAfter, crackInhibition };
             },
 
             calcROI: function(d, state, rec) {
@@ -719,9 +756,10 @@
 
                 let currentLife = Math.max(0, 15.0 - (d.years * 0.5) - (d.hours * 0.1) - (d.delay * 0.15) - (d.vibB * 1.0));
                 
-                // 💡 [수정] 수명 연장(Life Extension)을 아처드 마모 계수(K) 하락폭에 직접 연동
+                // 💡 [5단계] 욕조 곡선 (경제적 전략 / LCC)
                 let kDrop = Math.max(0, state.kFactorBefore - rec.kFactorAfter);
-                let lifeExtVal = d.active ? (kDrop * 1.2) : 0; 
+                let bathtubDelay = d.active ? (kDrop * 1.2) + (state.dirtLevel * 2.0) + (rec.crackInhibition * 2.0) : 0;
+                let lifeExtVal = bathtubDelay; 
 
                 let co2Saving = savedLiters * 2.64;
                 let trees = isNaN(co2Saving) ? 0 : Math.floor(co2Saving / 6.6);
@@ -730,18 +768,16 @@
             }
         };
 
-        // 2. 메인 화면 렌더링
         function calculate() {
             try {
                 const d = EngineSaaS.getInputs();
                 const state = EngineSaaS.calcState(d);
-                const comb = EngineSaaS.calcCombustion(d);
+                const comb = EngineSaaS.calcCombustion(d, state);
                 const rec = EngineSaaS.calcRecovery(d, state, comb);
                 const roi = EngineSaaS.calcROI(d, state, rec);
                 
                 currentGlobalState = { ...d, ...state, ...comb, ...rec, ...roi };
 
-                // 연소 UI 동기화
                 safeSetTxt('ambient-effect', `공기밀도 변화로 인한 최종 보정: ${(rec.tempCorrectionFactor * 100).toFixed(2)}% 적용됨`);
                 safeSetTxt('lambda-val-ui', comb.lambdaActual.toFixed(2));
                 safeSetTxt('combustion-state-ui', comb.combustionState);
@@ -749,17 +785,31 @@
                 if (stateUiEl) stateUiEl.className = comb.stateColor;
                 safeSetTxt('exhaust-loss-ui', comb.exhaustLoss.toFixed(2));
 
-                // 아처드 마모 법칙 UI 동기화
-                safeSetTxt('k-factor-before', state.kFactorBefore.toFixed(2));
-                safeSetTxt('k-factor-after', rec.kFactorAfter.toFixed(2));
-                const kAfterEl = document.getElementById('k-factor-after');
-                if (kAfterEl) {
-                    if (d.active) {
-                        kAfterEl.className = "text-2xl font-black text-emerald-400 text-center animate-pulse";
-                    } else {
-                        kAfterEl.className = "text-2xl font-black text-slate-500 text-center";
-                        kAfterEl.innerText = state.kFactorBefore.toFixed(2);
-                    }
+                // 💡 5단계 가치 체계 UI 패널 동기화
+                safeSetTxt('ui-step1', d.active ? "노화 진행 차단 (0.01%)" : `노화 가속 (${(state.arrheniusAging * 100 - 100).toFixed(1)}%)`);
+                safeSetTxt('ui-step2', d.active ? `기생부하 저감 (유체윤활)` : `마찰 부하 가중`);
+                safeSetTxt('ui-step3', d.active ? `엑서지(유효열) 보존` : `엑서지 파괴 (${comb.exergyDestruction.toFixed(1)}%)`);
+                safeSetTxt('ui-step4', d.active ? `균열 성장 억제 (ΔK↓)` : `피로 누적 가속`);
+                safeSetTxt('ui-step5', d.active ? `LCC 최적화 (수명 +${roi.lifeExtVal.toFixed(1)}년)` : `유지보수비(OPEX) 증가`);
+
+                let uiStep1El = document.getElementById('ui-step1');
+                let uiStep2El = document.getElementById('ui-step2');
+                let uiStep3El = document.getElementById('ui-step3');
+                let uiStep4El = document.getElementById('ui-step4');
+                let uiStep5El = document.getElementById('ui-step5');
+
+                if (d.active) {
+                    if (uiStep1El) uiStep1El.className = "text-[10px] font-black text-amber-400 text-right";
+                    if (uiStep2El) uiStep2El.className = "text-[10px] font-black text-blue-400 text-right";
+                    if (uiStep3El) uiStep3El.className = "text-[10px] font-black text-emerald-400 text-right";
+                    if (uiStep4El) uiStep4El.className = "text-[10px] font-black text-emerald-400 text-right";
+                    if (uiStep5El) uiStep5El.className = "text-[10px] font-black text-indigo-400 text-right animate-pulse";
+                } else {
+                    if (uiStep1El) uiStep1El.className = "text-[10px] font-black text-red-500 text-right";
+                    if (uiStep2El) uiStep2El.className = "text-[10px] font-black text-red-500 text-right";
+                    if (uiStep3El) uiStep3El.className = "text-[10px] font-black text-red-500 text-right";
+                    if (uiStep4El) uiStep4El.className = "text-[10px] font-black text-red-500 text-right";
+                    if (uiStep5El) uiStep5El.className = "text-[10px] font-black text-red-500 text-right";
                 }
 
                 safeSetTxt('rpm-val', d.rpm + " RPM");
@@ -777,9 +827,7 @@
                 if (d.active) {
                     let rangeStr = d.calcMode === 'safe' ? `(보수적 예측)` : `(예측 모델)`;
                     safeSetHtml('fuel-save-pct', `${rec.recoveryRate.toFixed(1)}<span class="text-sm font-bold ml-2 text-emerald-200">${rangeStr}</span>`);
-                } else {
-                    safeSetTxt('fuel-save-pct', "0.0");
-                }
+                } else { safeSetTxt('fuel-save-pct', "0.0"); }
                 
                 safeSetTxt('dynamic-current-text', `실측 절감 ${(rec.electricalEfficiency * 100).toFixed(1)}% 반영`);
                 safeSetTxt('net-save-exp', Math.floor(roi.expSave).toLocaleString());
@@ -788,12 +836,11 @@
                 
                 let roiText = "(--%)";
                 if (d.active && roi.expSave > 0) {
-                    roiText = roi.deduction > 0 ? `(ROI ${Math.floor((roi.expSave / roi.deduction) * 100)}%)` : `(투자비용 0원)`;
+                    roiText = roi.deduction > 0 ? `(ROI ${Math.floor((roi.expSave / roi.deduction) * 100)}%)` : `(비용 공제 없음)`;
                 }
                 safeSetTxt('roi-text', roiText);
                 
                 safeSetTxt('life-text-ext', roi.lifeExtVal.toFixed(1));
-                
                 safeSetTxt('noise-red', d.active ? rec.noiseDiff.toFixed(1) : "0.0");
                 safeSetTxt('temp-red', d.active ? rec.tempDiff.toFixed(1) : "0.0"); 
                 safeSetTxt('co2-saving', roi.co2Saving.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}));
@@ -803,9 +850,8 @@
                 safeSetStyle('cert-bar-user', 'width', Math.min(75, (lossDiff / 15.0) * 75) + "%");
 
                 let treeHTML = '';
-                if (roi.trees === 0) {
-                    treeHTML = '<span class="text-xs text-slate-400 font-bold">효과 대기 중</span>';
-                } else {
+                if (roi.trees === 0) treeHTML = '<span class="text-xs text-slate-400 font-bold">효과 대기 중</span>';
+                else {
                     let iconsToShow = Math.min(roi.trees, 40);
                     let iconSize = roi.trees > 20 ? 'text-xl' : 'text-3xl';
                     for(let i=0; i<iconsToShow; i++) treeHTML += `<span class="${iconSize} transform transition-all duration-500 hover:scale-125 cursor-default">🌲</span>`;
@@ -831,175 +877,6 @@
                     if(dC) dC.style.borderColor = "#10b981";
                     
                     let deductionMsg = d.costType === 'sub' ? "연간 구독 유지비를 제외하고도 " : (d.costType === 'once' ? "기기 도입비를 제외하고도 " : "");
-                    safeSetHtml('diag-msg', `💡 <b>0W-30 실증 기반 성능 예측:</b> 0W-30 기반 압도적 물성(VI 191)과 국제기계 실증(256A→230A)을 반영하여, 연료 변환 효율(${roi.FUEL_EFF_FACTOR})을 산출했습니다. ${deductionMsg}연간 <b>최대 ${Math.floor(roi.expSave).toLocaleString()}원</b>의 순이익이 기대됩니다.`);
+                    safeSetHtml('diag-msg', `💡 <b>5단계 물리적 가치 체계 증명:</b> RES3366의 압도적 스펙은 화학적 산화 방지(1단계)부터 마찰/기생부하 차단(2단계), 엑서지 극대화(3단계), 균열 억제(4단계)를 거쳐 최종 LCC 최적화(5단계)를 완성합니다. ${deductionMsg}연간 <b>최대 ${Math.floor(roi.expSave).toLocaleString()}원</b>의 순이익이 보장됩니다.`);
                 } else {
-                    if(hL) { hL.style.opacity = state.dirtLevel.toString(); hL.style.filter = `contrast(200%) brightness(${0.4 - state.dirtLevel * 0.3})`; }
-                    if(sL) sL.style.opacity = (state.dirtLevel * 0.9).toString(); if(pD) pD.style.opacity = (state.dirtLevel * 0.95).toString();
-                    if(cylW) cylW.style.background = "linear-gradient(90deg, #1e293b 0%, #475569 50%, #1e293b 100%)";
-                    safeSetStyle('piston', 'filter', `brightness(${0.8 - state.dirtLevel * 0.5})`); 
-                    safeSetStyle('sim-box', 'boxShadow', 'inset 15px 0 25px rgba(0,0,0,0.8), inset -15px 0 25px rgba(0,0,0,0.8)');
-                    if(hV) hV.style.setProperty('--heat-opacity', d.years >= 15 ? (d.years - 10) / 10 : 0);
-                    
-                    if(stT) { stT.innerText = state.dirtLevel < 0.1 ? "GOOD CONDITION" : (d.years >= 10 ? "CRITICAL: CARBON CRUST" : "CARBON DEPOSITING"); stT.className = `mt-4 text-[10px] font-black italic uppercase tracking-widest ${state.dirtLevel < 0.1 ? 'text-blue-400' : 'text-red-500 animate-pulse'}`; }
-                    if(dC) dC.style.borderColor = "#dc2626";
-                    
-                    safeSetHtml('diag-msg', `⚠️ <b>[${state.grade}등급] 진단 결과:</b><br>${aiCombinedMsg}장비 노후화 및 마찰로 인해 <b>연간 약 ${Math.floor(lossMoney).toLocaleString()}원의 손실</b>이 지속되고 있습니다.`);
-                }
-
-                safeSetStyle('sim-box', '--shake', d.active ? d.vibA * 0.4 : d.vibB * 10);
-                safeSetStyle('piston', 'animationDuration', `${0.9 - (d.rpm/4000)}s`);
-
-            } catch (e) { 
-                console.error("Calculation Error:", e); 
-            }
-        }
-
-        function showCertificate() {
-            const farmInp = document.getElementById('farm-name-input');
-            safeSetTxt('cert-farm-name', farmInp && farmInp.value ? farmInp.value : "미상 (미입력)");
-            safeSetTxt('cert-co2', currentGlobalState.co2Saving ? currentGlobalState.co2Saving.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) : "0.0");
-            safeSetTxt('cert-tree', currentGlobalState.trees ? currentGlobalState.trees.toLocaleString() : "0");
-            safeSetTxt('cert-recovery', currentGlobalState.recoveryRate ? currentGlobalState.recoveryRate.toFixed(1) + "% 복원" : "0.0%");
-            safeSetTxt('cert-life', currentGlobalState.active ? `+${currentGlobalState.lifeExtVal.toFixed(1)}년 추정` : "미적용");
-            let t = new Date(); safeSetTxt('cert-date', `${t.getFullYear()}년 ${t.getMonth()+1}월 ${t.getDate()}일`);
-            document.getElementById('carbon-cert-modal').classList.remove('hidden');
-        }
-        function closeCertificate() { document.getElementById('carbon-cert-modal').classList.add('hidden'); }
-
-        function openDataReport() {
-            const fn = document.getElementById('farm-name-input') ? document.getElementById('farm-name-input').value : "";
-            const cn = document.getElementById('contact-input') ? document.getElementById('contact-input').value : "";
-            const bm = document.getElementById('boiler-model-input') ? document.getElementById('boiler-model-input').value : "";
-
-            const dxData = {
-                "00. 고객명": `${fn || '미상'} / ${cn || '미입력'}`,
-                "01. 장비 모델": bm || '미상',
-                "02. 장비 상태 등급": `${currentGlobalState.grade || 'A'}등급`,
-                "03. 부하 전류(전->후)": `${currentGlobalState.currentB}A -> ${currentGlobalState.currentA}A`,
-                "04. 아처드 K값 개선": `${currentGlobalState.kFactorBefore.toFixed(2)} -> ${currentGlobalState.kFactorAfter.toFixed(2)}`,
-                "05. 마찰 손실률": `${currentGlobalState.finalLoss ? currentGlobalState.finalLoss.toFixed(1) : 0}%`,
-                "06. 예상 순이익(기대치)": currentGlobalState.active ? `${Math.floor(currentGlobalState.expSave).toLocaleString()}원` : "미적용",
-                "07. 상대 수명개선": currentGlobalState.active ? `+${currentGlobalState.lifeExtVal.toFixed(1)}년` : `변동 없음`
-            };
-            
-            let htmlStr = "";
-            for (const [k, v] of Object.entries(dxData)) {
-                htmlStr += `<div class="flex justify-between border-b border-slate-100 py-1.5"><span class="text-slate-500 font-bold">${k}</span><span class="text-slate-900 font-black">${v}</span></div>`;
-            }
-            safeSetHtml('report-content', htmlStr);
-            document.getElementById('data-report-modal').classList.remove('hidden');
-        }
-        function closeDataReport() { document.getElementById('data-report-modal').classList.add('hidden'); }
-
-        function setFuelType(type) {
-            const n = document.getElementById('fuel-normal'), t = document.getElementById('fuel-taxfree'), p = document.getElementById('oil-price-input');
-            if(n && t && p) { n.classList.toggle('active', type === 'normal'); t.classList.toggle('active', type === 'taxfree'); p.value = type === 'normal' ? 1500 : 1000; calculate(); }
-        }
-
-        async function confirmFinalSend() {
-            safeSetTxt('btn-text', "데이터 서버 전송 중...");
-            safeSetStyle('send-progress', 'width', "40%");
-
-            const fn = document.getElementById('farm-name-input') ? document.getElementById('farm-name-input').value : "";
-            const cn = document.getElementById('contact-input') ? document.getElementById('contact-input').value : "";
-            const bm = document.getElementById('boiler-model-input') ? document.getElementById('boiler-model-input').value : "";
-            const locSelect = document.getElementById('location-select');
-            const loc = locSelect && locSelect.selectedOptions.length > 0 ? locSelect.selectedOptions[0].text : "미지정";
-
-            const sendData = {
-                location: loc, clientName: fn || "고객명 미입력", machineModel: bm || "모델명 미입력", phone: cn || "연락처 미입력",
-                rpm: currentGlobalState.rpm, years: currentGlobalState.years, hours: currentGlobalState.hours, delay: currentGlobalState.delay,
-                price: currentGlobalState.price, amount: currentGlobalState.amount,
-                currentB: currentGlobalState.currentB, currentA: currentGlobalState.currentA, vibB: currentGlobalState.vibB, vibA: currentGlobalState.vibA,
-                noiseB: currentGlobalState.noiseB, noiseA: currentGlobalState.noiseA, tempB: currentGlobalState.tempB, tempA: currentGlobalState.tempA,
-                grade: currentGlobalState.grade, lossRate: currentGlobalState.currentLoss, recoveryRate: currentGlobalState.recoveryRate,
-                annualSavings: currentGlobalState.expSave, roi: currentGlobalState.deduction > 0 ? Math.floor((currentGlobalState.expSave / currentGlobalState.deduction) * 100) : 0,
-                lifeExt: currentGlobalState.lifeExtVal, co2: currentGlobalState.co2Saving
-            };
-
-            try {
-                if (GOOGLE_SHEET_URL.includes("AKfy")) {
-                    fetch(GOOGLE_SHEET_URL, {
-                        method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sendData)
-                    });
-                } else {
-                    console.warn("구글 앱스 스크립트 웹앱 URL이 설정되지 않아 가상 전송으로 대체합니다.");
-                }
-
-                safeSetStyle('send-progress', 'width', "100%");
-                safeSetTxt('btn-text', "✅ 전송 및 자산화 완료");
-                
-                setTimeout(() => {
-                    closeDataReport();
-                    safeSetStyle('send-progress', 'width', "0%");
-                    safeSetTxt('btn-text', "최종 승인 및 전송");
-                    showCoupon();
-                }, 1500);
-
-            } catch (error) {
-                console.error("Transmission Error:", error);
-                alert("데이터 전송에 실패했습니다. 네트워크를 확인해주세요.");
-                safeSetTxt('btn-text', "전송 실패 (재시도)");
-                safeSetStyle('send-progress', 'width', "0%");
-            }
-        }
-
-        function showCoupon() { 
-            let d = new Date(); d.setMonth(d.getMonth()+1); safeSetTxt('coupon-expiry-date', `${d.getFullYear()}. ${String(d.getMonth()+1).padStart(2,'0')}. ${String(d.getDate()).padStart(2,'0')} 까지`); 
-            document.getElementById('coupon-modal').classList.remove('hidden'); 
-        }
-        function closeCoupon() { document.getElementById('coupon-modal').classList.add('hidden'); }
-
-        // [날씨 API + 외기 온도 슬라이더 자동 동기화]
-        async function fetchWeather(lat, lon) {
-            try {
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-                const data = await res.json();
-                const temp = data.current_weather.temperature;
-                const code = data.current_weather.weathercode;
-                let icon = "☁️";
-                if (code === 0) icon = "☀️";
-                else if (code >= 1 && code <= 3) icon = "⛅";
-                else if (code >= 51 && code <= 67 || code >= 80 && code <= 82) icon = "🌧️";
-                else if (code >= 71 && code <= 77 || code === 85 || code === 86) icon = "❄️";
-                else if (code >= 95) icon = "⛈️";
-                safeSetTxt('weather-icon', icon);
-                safeSetTxt('weather-temp-display', `${temp.toFixed(1)}°C`);
-                
-                const tempInput = document.getElementById('ambient-temp');
-                if(tempInput) {
-                    tempInput.value = Math.round(temp);
-                    document.getElementById('ambient-temp-display').innerText = Math.round(temp);
-                    calculate(); 
-                }
-
-            } catch(e) {
-                safeSetTxt('weather-icon', "🌡️");
-                safeSetTxt('weather-temp-display', "15.4°C");
-            }
-        }
-
-        function handleLocationChange() {
-            const select = document.getElementById('location-select');
-            if(select && select.value === 'auto') {
-                select.options[0].text = "📍 위치 파악 중...";
-                if(navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((pos) => {
-                        select.options[0].text = `📍 내 위치 (${pos.coords.latitude.toFixed(2)}, ${pos.coords.longitude.toFixed(2)})`;
-                        fetchWeather(pos.coords.latitude, pos.coords.longitude);
-                    }, () => {
-                        select.options[0].text = "📍 GPS 권한 필요";
-                        fetchWeather(35.4925, 128.7441);
-                    });
-                }
-            } else fetchWeather(35.4925, 128.7441);
-        }
-
-        // 앱 초기화 구동
-        window.onload = () => {
-            fetchWeather(35.4925, 128.7441); 
-            calculate();
-        };
-    </script>
-</body>
-</html>
+                 
