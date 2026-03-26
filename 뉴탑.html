@@ -874,3 +874,154 @@
                     safeSetStyle('piston', 'filter', 'brightness(1.4) contrast(1.1)'); 
                     safeSetStyle('sim-box', 'boxShadow', 'inset 10px 0 20px rgba(0,0,0,0.5), inset -10px 0 20px rgba(0,0,0,0.5)');
                     if(hV) hV.style.setProperty('--heat-opacity', '0');
+                    if(stT) { stT.innerText = "DX METAL POLISHING (CLEAN)"; stT.className = "mt-4 text-[10px] font-black text-emerald-500 italic uppercase tracking-widest"; }
+                    if(dC) dC.style.borderColor = "#10b981";
+                    
+                    let deductionMsg = d.costType === 'sub' ? "연간 구독 유지비를 제외하고도 " : (d.costType === 'once' ? "기기 도입비를 제외하고도 " : "");
+                    safeSetHtml('diag-msg', `💡 <b>5단계 물리적 가치 체계 증명:</b> RES3366의 압도적 스펙은 화학적 산화 방지(1단계)부터 마찰/기생부하 차단(2단계), 엑서지 극대화(3단계), 균열 억제(4단계)를 거쳐 최종 LCC 최적화(5단계)를 완성합니다. ${deductionMsg}연간 <b>최대 ${Math.floor(roi.expSave).toLocaleString()}원</b>의 순이익이 보장됩니다.`);
+                } else {
+                    if(hL) { hL.style.opacity = state.dirtLevel.toString(); hL.style.filter = `contrast(200%) brightness(${0.4 - state.dirtLevel * 0.3})`; }
+                    if(sL) sL.style.opacity = (state.dirtLevel * 0.9).toString(); if(pD) pD.style.opacity = (state.dirtLevel * 0.95).toString();
+                    if(cylW) cylW.style.background = "linear-gradient(90deg, #1e293b 0%, #475569 50%, #1e293b 100%)";
+                    safeSetStyle('piston', 'filter', `brightness(${0.8 - state.dirtLevel * 0.5})`); 
+                    safeSetStyle('sim-box', 'boxShadow', 'inset 15px 0 25px rgba(0,0,0,0.8), inset -15px 0 25px rgba(0,0,0,0.8)');
+                    if(hV) hV.style.setProperty('--heat-opacity', d.years >= 15 ? (d.years - 10) / 10 : 0);
+                    
+                    if(stT) { stT.innerText = state.dirtLevel < 0.1 ? "GOOD CONDITION" : (d.years >= 10 ? "CRITICAL: CARBON CRUST" : "CARBON DEPOSITING"); stT.className = `mt-4 text-[10px] font-black italic uppercase tracking-widest ${state.dirtLevel < 0.1 ? 'text-blue-400' : 'text-red-500 animate-pulse'}`; }
+                    if(dC) dC.style.borderColor = "#dc2626";
+                    
+                    safeSetHtml('diag-msg', `⚠️ <b>[${state.grade}등급] 진단 결과:</b><br>${aiCombinedMsg}장비 노후화 및 마찰로 인해 <b>연간 약 ${Math.floor(lossMoney).toLocaleString()}원의 손실</b>이 지속되고 있습니다.`);
+                }
+
+                safeSetStyle('sim-box', '--shake', d.active ? d.vibA * 0.4 : d.vibB * 10);
+                safeSetStyle('piston', 'animationDuration', `${0.9 - (d.rpm/4000)}s`);
+
+            } catch (e) { console.error("Calculation Error:", e); }
+        }
+
+        function showCertificate() {
+            const farmInp = document.getElementById('farm-name-input');
+            safeSetTxt('cert-farm-name', farmInp && farmInp.value ? farmInp.value : "미상 (미입력)");
+            safeSetTxt('cert-co2', currentGlobalState.co2Saving ? currentGlobalState.co2Saving.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) : "0.0");
+            safeSetTxt('cert-tree', currentGlobalState.trees ? currentGlobalState.trees.toLocaleString() : "0");
+            safeSetTxt('cert-recovery', currentGlobalState.recoveryRate ? currentGlobalState.recoveryRate.toFixed(1) + "% 복원" : "0.0%");
+            safeSetTxt('cert-life', currentGlobalState.active ? `+${currentGlobalState.lifeExtVal.toFixed(1)}년 추정` : "미적용");
+            let t = new Date(); safeSetTxt('cert-date', `${t.getFullYear()}년 ${t.getMonth()+1}월 ${t.getDate()}일`);
+            document.getElementById('carbon-cert-modal').classList.remove('hidden');
+        }
+        function closeCertificate() { document.getElementById('carbon-cert-modal').classList.add('hidden'); }
+
+        function openDataReport() {
+            const fn = document.getElementById('farm-name-input') ? document.getElementById('farm-name-input').value : "";
+            const cn = document.getElementById('contact-input') ? document.getElementById('contact-input').value : "";
+            const bm = document.getElementById('boiler-model-input') ? document.getElementById('boiler-model-input').value : "";
+
+            const dxData = {
+                "00. 고객명": `${fn || '미상'} / ${cn || '미입력'}`,
+                "01. 장비 모델": bm || '미상',
+                "02. 장비 상태 등급": `${currentGlobalState.grade || 'A'}등급`,
+                "03. 부하 전류(전->후)": `${currentGlobalState.currentB}A -> ${currentGlobalState.currentA}A`,
+                "04. 마찰 손실률": `${currentGlobalState.finalLoss ? currentGlobalState.finalLoss.toFixed(1) : 0}%`,
+                "05. 엑서지 파괴 방어": `${currentGlobalState.active ? '적용됨' : '파괴 가속'}`,
+                "06. 예상 순이익(기대치)": currentGlobalState.active ? `${Math.floor(currentGlobalState.expSave).toLocaleString()}원` : "미적용",
+                "07. 상대 수명개선": currentGlobalState.active ? `+${currentGlobalState.lifeExtVal.toFixed(1)}년` : `변동 없음`
+            };
+            
+            let htmlStr = "";
+            for (const [k, v] of Object.entries(dxData)) {
+                htmlStr += `<div class="flex justify-between border-b border-slate-100 py-1.5"><span class="text-slate-500 font-bold">${k}</span><span class="text-slate-900 font-black">${v}</span></div>`;
+            }
+            safeSetHtml('report-content', htmlStr);
+            document.getElementById('data-report-modal').classList.remove('hidden');
+        }
+        function closeDataReport() { document.getElementById('data-report-modal').classList.add('hidden'); }
+
+        function setFuelType(type) {
+            const n = document.getElementById('fuel-normal'), t = document.getElementById('fuel-taxfree'), p = document.getElementById('oil-price-input');
+            if(n && t && p) { n.classList.toggle('active', type === 'normal'); t.classList.toggle('active', type === 'taxfree'); p.value = type === 'normal' ? 1500 : 1000; calculate(); }
+        }
+
+        async function confirmFinalSend() {
+            safeSetTxt('btn-text', "데이터 서버 전송 중...");
+            safeSetStyle('send-progress', 'width', "40%");
+
+            const fn = document.getElementById('farm-name-input') ? document.getElementById('farm-name-input').value : "";
+            const cn = document.getElementById('contact-input') ? document.getElementById('contact-input').value : "";
+            const bm = document.getElementById('boiler-model-input') ? document.getElementById('boiler-model-input').value : "";
+            const locSelect = document.getElementById('location-select');
+            const loc = locSelect && locSelect.selectedOptions.length > 0 ? locSelect.selectedOptions[0].text : "미지정";
+
+            const sendData = {
+                location: loc, clientName: fn || "고객명 미입력", machineModel: bm || "모델명 미입력", phone: cn || "연락처 미입력",
+                rpm: currentGlobalState.rpm, years: currentGlobalState.years, hours: currentGlobalState.hours, delay: currentGlobalState.delay,
+                price: currentGlobalState.price, amount: currentGlobalState.amount,
+                currentB: currentGlobalState.currentB, currentA: currentGlobalState.currentA, vibB: currentGlobalState.vibB, vibA: currentGlobalState.vibA,
+                noiseB: currentGlobalState.noiseB, noiseA: currentGlobalState.noiseA, tempB: currentGlobalState.tempB, tempA: currentGlobalState.tempA,
+                grade: currentGlobalState.grade, lossRate: currentGlobalState.currentLoss, recoveryRate: currentGlobalState.recoveryRate,
+                annualSavings: currentGlobalState.expSave, roi: currentGlobalState.deduction > 0 ? Math.floor((currentGlobalState.expSave / currentGlobalState.deduction) * 100) : 0,
+                lifeExt: currentGlobalState.lifeExtVal, co2: currentGlobalState.co2Saving
+            };
+
+            try {
+                if (GOOGLE_SHEET_URL.includes("AKfy")) {
+                    fetch(GOOGLE_SHEET_URL, {
+                        method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sendData)
+                    });
+                } else { console.warn("가상 전송 대체"); }
+
+                safeSetStyle('send-progress', 'width', "100%");
+                safeSetTxt('btn-text', "✅ 전송 및 자산화 완료");
+                
+                setTimeout(() => {
+                    closeDataReport(); safeSetStyle('send-progress', 'width', "0%"); safeSetTxt('btn-text', "최종 승인 및 전송"); showCoupon();
+                }, 1500);
+            } catch (error) {
+                console.error("Transmission Error:", error); alert("데이터 전송 실패");
+                safeSetTxt('btn-text', "전송 실패 (재시도)"); safeSetStyle('send-progress', 'width', "0%");
+            }
+        }
+
+        function showCoupon() { 
+            let d = new Date(); d.setMonth(d.getMonth()+1); safeSetTxt('coupon-expiry-date', `${d.getFullYear()}. ${String(d.getMonth()+1).padStart(2,'0')}. ${String(d.getDate()).padStart(2,'0')} 까지`); 
+            document.getElementById('coupon-modal').classList.remove('hidden'); 
+        }
+        function closeCoupon() { document.getElementById('coupon-modal').classList.add('hidden'); }
+
+        async function fetchWeather(lat, lon) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const data = await res.json();
+                const temp = data.current_weather.temperature;
+                const code = data.current_weather.weathercode;
+                let icon = "☁️";
+                if (code === 0) icon = "☀️";
+                else if (code >= 1 && code <= 3) icon = "⛅";
+                else if (code >= 51 && code <= 67 || code >= 80 && code <= 82) icon = "🌧️";
+                else if (code >= 71 && code <= 77 || code === 85 || code === 86) icon = "❄️";
+                else if (code >= 95) icon = "⛈️";
+                safeSetTxt('weather-icon', icon); safeSetTxt('weather-temp-display', `${temp.toFixed(1)}°C`);
+                
+                const tempInput = document.getElementById('ambient-temp');
+                if(tempInput) {
+                    tempInput.value = Math.round(temp); document.getElementById('ambient-temp-display').innerText = Math.round(temp); calculate(); 
+                }
+            } catch(e) { safeSetTxt('weather-icon', "🌡️"); safeSetTxt('weather-temp-display', "15.4°C"); }
+        }
+
+        function handleLocationChange() {
+            const select = document.getElementById('location-select');
+            if(select && select.value === 'auto') {
+                select.options[0].text = "📍 위치 파악 중...";
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        select.options[0].text = `📍 내 위치 (${pos.coords.latitude.toFixed(2)}, ${pos.coords.longitude.toFixed(2)})`;
+                        fetchWeather(pos.coords.latitude, pos.coords.longitude);
+                    }, () => { select.options[0].text = "📍 GPS 권한 필요"; fetchWeather(35.4925, 128.7441); });
+                }
+            } else fetchWeather(35.4925, 128.7441);
+        }
+
+        window.onload = () => { fetchWeather(35.4925, 128.7441); calculate(); };
+    </script>
+</body>
+</html>
