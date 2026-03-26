@@ -299,7 +299,7 @@
             <div class="space-y-6 flex flex-col h-full">
                 <div class="bg-emerald-600 rounded-[2.5rem] p-8 text-white shadow-xl relative overflow-hidden">
                     <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-                    <p class="text-[11px] font-black italic uppercase tracking-widest opacity-90 mb-1">DX 성능 복원 및 기대 수익</p>
+                    <p class="text-[11px] font-black italic uppercase tracking-widest opacity-90 mb-1">DX 성능 복 복원 및 기대 수익</p>
                     <div class="flex items-baseline gap-1">
                         <span class="text-7xl font-black italic tracking-tighter" id="fuel-save-pct">0.0</span>
                         <span class="text-2xl font-black italic text-emerald-100">%</span>
@@ -755,15 +755,25 @@
             }
         };
 
-        // 🚨 [최적화 수정 1] 저사양 폰 버벅임 방지를 위한 연산 딜레이(디바운싱) 적용
-        let calcTimeout = null;
+        // 🚨 [최적화 1] 슬라이더 터치 시 발생하는 무거운 연산(calculate)을 차단하고,
+        // 대신 50ms마다 딱 한 번만 부드럽게 연산하도록 '디바운싱(쇼크업소버)'을 적용했습니다.
+        let calcTimer = null;
+        
         function calculate() {
-            if (calcTimeout) clearTimeout(calcTimeout);
-            calcTimeout = setTimeout(() => {
+            // UI의 숫자만 바로바로 바꿔주어 체감 속도 향상
+            safeSetTxt('ambient-temp-display', safeGetVal('ambient-temp', 20));
+            safeSetTxt('rpm-val', safeGetVal('rpm', 1800) + " RPM");
+            safeSetTxt('years-val', safeGetVal('years', 1) + "년");
+            safeSetTxt('hours-val', safeGetVal('hours', 1) + "시간");
+            safeSetTxt('delay-val', safeGetVal('delay', 0) + "개월");
+
+            if (calcTimer) clearTimeout(calcTimer);
+            calcTimer = setTimeout(() => {
                 requestAnimationFrame(doCalculateReal);
-            }, 15); // 15ms 딜레이로 연산 과부하 완벽 차단
+            }, 50);
         }
 
+        // 🚨 [최적화 2] 진짜 무거운 수학 연산 및 DOM 업데이트
         function doCalculateReal() {
             try {
                 const d = EngineSaaS.getInputs();
@@ -808,11 +818,6 @@
                     if (uiStep5El) uiStep5El.className = "text-[10px] font-black text-red-500 text-right";
                 }
                 
-                safeSetTxt('rpm-val', d.rpm + " RPM");
-                safeSetHtml('years-val', `${d.years}년`);
-                safeSetTxt('hours-val', d.hours + "시간");
-                safeSetTxt('delay-val', d.delay + "개월");
-
                 safeSetTxt('loss-val', rec.finalLoss.toFixed(1));
                 safeSetTxt('waste-liters', Math.floor(d.amount * (rec.finalLoss / 100)).toLocaleString());
                 
@@ -869,6 +874,3 @@
                     safeSetStyle('piston', 'filter', 'brightness(1.4) contrast(1.1)'); 
                     safeSetStyle('sim-box', 'boxShadow', 'inset 10px 0 20px rgba(0,0,0,0.5), inset -10px 0 20px rgba(0,0,0,0.5)');
                     if(hV) hV.style.setProperty('--heat-opacity', '0');
-                    if(stT) { stT.innerText = "DX METAL POLISHING (CLEAN)"; stT.className = "mt-4 text-[10px] font-black text-emerald-500 italic uppercase tracking-widest"; }
-                    if(dC) dC.style.borderColor = "#10b981";
-                    
