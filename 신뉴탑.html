@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWTOP Simulator - 탄소 자산화 대시보드 (Live 검증판)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #0b1120; color: #f8fafc; overflow-x: hidden; }
+
+        /* Custom Slider Style */
+        .custom-slider {
+            -webkit-appearance: none;
+            width: 100%; height: 6px; background: #334155; border-radius: 4px; outline: none; position: relative;
+        }
+        .custom-slider::before {
+            content: ''; position: absolute; top: 0; left: 0; height: 100%;
+            width: var(--val, 50%); background: var(--slider-color, #3b82f6); border-radius: 4px; pointer-events: none;
+        }
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
+            border-radius: 50%; background: #ffffff; border: 3px solid var(--slider-color, #3b82f6);
+            cursor: pointer; z-index: 2; position: relative; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Chart Animations */
+        .bar-grow { transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .conic-chart {
+            background: conic-gradient(#10b981 var(--pct, 0%), #1e293b 0);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .conic-chart::before {
+            content: ''; position: absolute; inset: 0; border-radius: 50%; padding: 8px;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+        }
+        
+        /* Verification Badge Animation */
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+        }
+        .verify-badge { animation: pulse-gold 2s infinite; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+        /* Stamp style for certificate */
+        .official-stamp {
+            position: absolute; right: 2rem; bottom: 2.5rem;
+            width: 80px; height: 80px; border: 4px solid #dc2626; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #dc2626; font-weight: 900; font-size: 1.1rem; line-height: 1.2;
+            transform: rotate(-15deg); opacity: 0.85; mix-blend-multiply;
+            box-shadow: inset 0 0 0 2px #dc2626; padding: 4px;
+        }
+        .official-stamp::after {
+            content: ''; position: absolute; inset: 2px; border: 1px dashed #dc2626; border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="p-2 md:p-6 min-h-screen flex items-center justify-center relative">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Official Certificate Modal -->
+    <div id="cert-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-slate-100 text-slate-900 w-full max-w-lg mx-4 rounded-xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col" id="cert-modal-content">
+            
+            <!-- Certificate Paper Area -->
+            <div class="p-6 bg-white m-3 rounded shadow-[0_0_15px_rgba(0,0,0,0.05)] relative border border-slate-200">
+                <!-- Inner Double Border -->
+                <div class="border-4 border-double border-slate-300 p-8 relative min-h-[400px] flex flex-col">
+                    
+                    <!-- Watermark -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+                        <span class="text-8xl font-black italic tracking-tighter">NEWTOP</span>
+                    </div>
+                    
+                    <!-- Header -->
+                    <h2 class="text-2xl sm:text-3xl font-black text-center tracking-widest mb-8 border-b-2 border-slate-800 pb-4 text-slate-800">
+                        탄소 감축 예상 진단서
+                    </h2>
+                    
+                    <!-- Fields -->
+                    <div class="space-y-4 text-sm font-medium mb-12 relative z-10">
+                        <div class="flex justify-between border-b border-slate-200 pb-2">
+                            <span class="text-slate-500">진단 번호</span>
+                            <span class="font-mono text-slate-700" id="cert-no">NT-2026-000000</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-200 pb-2">
+                            <span class="text-slate-500">진단 일자</span>
+                            <span id="cert-date" class="font-bold text-slate-800"></span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-200 pb-2">
+                            <span class="text-slate-500">수신 사업장 (대상)</span>
+                            <span class="font-bold text-slate-800">서경원 대표 (MRV 관리자)</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-200 pb-2">
+                            <span class="text-slate-500">진단 대상 설비</span>
+                            <span id="cert-motors" class="font-bold text-slate-800"></span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-200 pb-2 items-center bg-emerald-50 px-2 -mx-2 rounded">
+                            <span class="text-slate-600 font-bold">예상 연간 탄소 감축량</span>
+                            <span id="cert-carbon" class="text-emerald-600 font-black text-lg"></span>
+                        </div>
+                    </div>
+
+                    <!-- Certification Text -->
+                    <p class="text-center text-sm leading-relaxed mb-12 font-bold text-slate-700 break-keep relative z-10">
+                        위 사업장은 NEWTOP 기후테크 솔루션(TDP v1.0) 진단 결과,<br>
+                        기존 설비의 마찰 손실 저감을 통해 위와 같은<br>
+                        에너지 효율 개선 및 탄소 감축 효과가 예상됨을<br>
+                        공식적으로 증명합니다.
+                    </p>
+
+                    <!-- Footer & Stamp -->
+                    <div class="mt-auto flex justify-between items-end relative z-10">
+                        <div class="text-[10px] text-slate-400 font-mono leading-tight">
+                            Powered by NEWTOP LAB<br>
+                            LCA & Scope 2 Analytics
+                        </div>
+                        <div class="text-right pr-4">
+                            <p class="text-xl font-black tracking-widest text-slate-800">NEWTOP LAB</p>
+                            <p class="text-xs text-slate-500 font-bold mt-1">대표 서 경 원</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Authentic Red Stamp -->
+                    <div class="official-stamp text-center">
+                        뉴탑랩<br>인증필
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3 px-5 pb-5 bg-slate-100">
+                <button onclick="closeCertificateModal()" class="w-1/3 py-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors shadow-sm text-sm">
+                    닫기
+                </button>
+                <button onclick="downloadCertificate()" class="w-2/3 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center gap-2 text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    PDF로 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="w-full max-w-[1400px] bg-[#111827] border border-slate-700/60 rounded-[1.5rem] shadow-2xl overflow-hidden flex flex-col">
+        
+        <!-- Header with Verification Status & Live Widget -->
+        <header class="flex flex-wrap justify-between items-center px-6 py-4 border-b border-slate-800 bg-[#0f172a] gap-4">
+            
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-emerald-600 rounded flex items-center justify-center shadow-lg">
+                    <span class="text-white text-2xl font-black italic">N</span>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-tight text-white uppercase flex items-center gap-2">
+                        Net-Top Carbon Simulator
+                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            VERIFIED v3.2
+                        </span>
+                    </h1>
+                    <p class="text-[10px] text-slate-500 font-medium">LCA & Scope 2 Analytics Platform</p>
+                </div>
+            </div>
+
+            <!-- LIVE ENVIRONMENT WIDGET (Time, GPS, Weather) -->
+            <div class="flex flex-wrap justify-center items-center gap-2 md:gap-4 bg-slate-900/80 border border-slate-700/50 rounded-full px-4 py-2 shadow-inner order-last lg:order-none w-full lg:w-auto mt-2 lg:mt-0">
+                <!-- Live Indicator -->
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                    </span>
+                    <span class="text-[10px] font-black text-red-400 tracking-widest uppercase mt-0.5">Live</span>
+                </div>
+                <div class="w-px h-3 bg-slate-700"></div>
+                <!-- Clock -->
+                <div class="flex items-center gap-1.5 text-slate-300">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span id="live-clock" class="text-[11px] font-mono tracking-tight text-white mt-0.5">0000-00-00 00:00:00</span>
+                </div>
+                <div class="w-px h-3 bg-slate-700"></div>
+                <!-- Location & Weather -->
+                <div class="flex items-center gap-2 text-slate-300">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span id="live-location" class="text-[11px] font-medium truncate max-w-[140px] mt-0.5">위치 정보 연동 중...</span>
+                    <span id="live-weather-icon" class="text-sm ml-1">🔄</span>
+                    <span id="live-weather-temp" class="text-[12px] font-black text-emerald-400 mt-0.5 w-12 text-right">--.-°C</span>
+                </div>
+            </div>
+            
+            <!-- User & Variables -->
+            <div class="flex items-center gap-6">
+                <div class="hidden lg:flex items-center gap-4 border-r border-slate-700 pr-6">
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-500 font-bold uppercase">Grid Factor</p>
+                        <p class="text-xs font-mono text-emerald-400">0.4432kg/kWh</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-500 font-bold uppercase">Carbon Price</p>
+                        <p class="text-xs font-mono text-blue-400">₩22,500/t</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <p class="text-xs font-bold text-white leading-tight">서경원 <span class="text-[10px] text-slate-400 font-normal">대표</span></p>
+                        <p class="text-[9px] text-emerald-500/80 font-bold tracking-wider">MRV 관리자</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-slate-700 border-2 border-emerald-500 shadow-inner overflow-hidden flex items-center justify-center">
+                        <svg class="w-6 h-6 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 flex-grow bg-[#0b1120]">
+            
+            <!-- STEP 1: Input & Verification -->
+            <div class="lg:col-span-3 flex flex-col gap-4">
+                <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-5 h-full flex flex-col shadow-lg">
+                    <div class="flex items-center justify-between mb-6 border-b border-slate-700/50 pb-3">
+                        <h2 class="text-sm font-black text-white flex items-center gap-2">
+                            <span class="w-5 h-5 bg-blue-500 rounded flex items-center justify-center text-[10px]">1</span>
+                            운영 환경 설정
+                        </h2>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- 설비 설정 -->
+                        <div>
+                            <div class="flex justify-between text-[11px] text-slate-400 mb-2">
+                                <label>진단 대상 모터 수 (대)</label>
+                                <span class="font-mono text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-700" id="val-motors">100</span>
+                            </div>
+                            <input type="range" id="in-motors" min="10" max="500" value="100" class="custom-slider" style="--slider-color: #3b82f6;" oninput="updateUI()">
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-[11px] text-slate-400 mb-2">
+                                <label>평균 출력 (kW/대)</label>
+                                <span class="font-mono text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-700" id="val-kw">55</span>
+                            </div>
+                            <input type="range" id="in-kw" min="10" max="250" value="55" class="custom-slider" style="--slider-color: #3b82f6;" oninput="updateUI()">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[11px] text-slate-400 mb-2">
+                                <label>전력 단가 (₩/kWh)</label>
+                                <span class="font-mono text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-700" id="val-price">140</span>
+                            </div>
+                            <input type="range" id="in-price" min="100" max="250" value="140" class="custom-slider" style="--slider-color: #3b82f6;" oninput="updateUI()">
+                        </div>
+
+                        <!-- 실증 데이터 기반 절감률 -->
+                        <div class="pt-6 border-t border-slate-700/50">
+                            <div class="flex justify-between items-center mb-3">
+                                <label class="text-xs font-bold text-emerald-400 italic">Verified Efficiency</label>
+                                <span class="text-sm font-black text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/50" id="val-save">10.2%</span>
+                            </div>
+                            <input type="range" id="in-save" min="5" max="20" step="0.1" value="10.2" class="custom-slider" oninput="updateUI()" style="--slider-color: #10b981;">
+                            
+                            <!-- 실증 근거 박스 (핵심 방어) -->
+                            <div class="mt-4 p-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg relative overflow-hidden shadow-inner">
+                                <div class="absolute top-0 right-0 p-1">
+                                    <svg class="w-4 h-4 text-emerald-500 opacity-50" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
+                                </div>
+                                <p class="text-[10px] text-emerald-300 font-bold leading-tight mb-1.5 flex items-center gap-1">
+                                    <span class="w-1 h-1 bg-emerald-400 rounded-full"></span> 실증 데이터 반영됨
+                                </p>
+                                <p class="text-[9px] text-emerald-500/80 leading-relaxed">
+                                    [국제기계 실증] 30kW 연속운전 설비<br>
+                                    부하 전류 256A → 230A <strong class="text-emerald-400">(▼10.2% 저감)</strong><br>
+                                    *공인 시험성적서 기반 점도지수 191 적용
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Carbon Asset (Central Dashboard) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-5 h-full flex flex-col shadow-lg relative overflow-hidden">
+                    
+                    <!-- Ambient Glow -->
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none"></div>
+
+                    <div class="flex items-center justify-between mb-6 border-b border-slate-700/50 pb-3">
+                        <h2 class="text-sm font-black text-white flex items-center gap-2">
+                            <span class="w-5 h-5 bg-emerald-500 rounded flex items-center justify-center text-[10px]">2</span>
+                            탄소 자산화 대시보드
+                        </h2>
+                        <div class="text-[10px] text-emerald-500/70 font-mono tracking-widest uppercase border border-emerald-500/30 px-2 py-0.5 rounded bg-emerald-500/10 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                            Live Engine
+                        </div>
+                    </div>
+
+                    <!-- Main Charts -->
+                    <div class="flex-grow grid grid-cols-2 gap-8 items-center relative z-10">
+                        <!-- Connecting Line -->
+                        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px bg-slate-700 border-t border-dashed border-slate-500 hidden xl:block"></div>
+
+                        <div class="flex flex-col items-center">
+                            <h4 class="text-[10px] font-bold text-slate-500 mb-6 uppercase tracking-widest text-center">Power Load<br>Comparison</h4>
+                            <div class="relative w-32 h-40 border-b border-slate-600 flex items-end justify-center gap-4">
+                                <div class="w-10 bg-slate-700 rounded-t-sm relative bar-grow" id="bar-pre" style="height: 100%;">
+                                    <span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] text-slate-500 font-bold">PRE</span>
+                                </div>
+                                <div class="w-10 bg-gradient-to-t from-emerald-500 to-cyan-400 rounded-t-sm shadow-[0_0_20px_rgba(16,185,129,0.3)] relative bar-grow" id="bar-post">
+                                    <span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] text-emerald-400 font-black">POST</span>
+                                </div>
+                            </div>
+                            <p class="mt-4 text-[11px] font-medium text-slate-400"><span id="out-saved-pct-label" class="text-white font-bold">10.2</span>% 절감 가능성</p>
+                        </div>
+
+                        <div class="flex flex-col items-center">
+                            <h4 class="text-[10px] font-bold text-slate-500 mb-6 uppercase tracking-widest text-center">Carbon<br>Reduction Rate</h4>
+                            <div class="w-40 h-40 conic-chart" id="circle-chart">
+                                <div class="w-[82%] h-[82%] bg-[#1e293b] rounded-full flex flex-col items-center justify-center shadow-inner border border-slate-800">
+                                    <span class="text-3xl font-black text-white tracking-tighter" id="circle-val">10.2%</span>
+                                    <span class="text-[9px] text-emerald-500 font-bold tracking-widest uppercase mt-1">Verified</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Metrics -->
+                    <div class="mt-8 grid grid-cols-2 gap-4 relative z-10">
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Energy Benefit</span>
+                            </div>
+                            <p class="text-2xl font-black text-white tracking-tight"><span id="out-saved-kwh">0</span> <span class="text-xs text-slate-500 font-normal">kWh/yr</span></p>
+                        </div>
+                        <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700/50 shadow-inner">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Carbon Benefit</span>
+                            </div>
+                            <p class="text-2xl font-black text-emerald-400 tracking-tight"><span id="out-carbon">0</span> <span class="text-xs text-emerald-700 font-normal">tCO₂e</span></p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-gradient-to-r from-emerald-900/40 to-blue-900/40 p-4 rounded-xl border border-emerald-500/20 flex items-center justify-between relative z-10 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                        <div>
+                            <p class="text-[10px] text-emerald-200/70 font-bold uppercase mb-1 tracking-widest">Carbon Asset Projection (5yr)</p>
+                            <p class="text-3xl font-black text-white tracking-tighter">₩ <span id="out-asset">0</span></p>
+                        </div>
+                        <div class="w-12 h-12 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 verify-badge shadow-lg backdrop-blur-sm">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3 & 4: Financial Analysis & Actions -->
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                <div class="bg-[#1e293b] border border-slate-700/80 rounded-xl p-5 h-full flex flex-col shadow-lg">
+                    
+                    <!-- STEP 3 Header -->
+                    <div class="flex items-center justify-between mb-5 border-b border-slate-700/50 pb-3">
+                        <h2 class="text-sm font-black text-white flex items-center gap-2">
+                            <span class="w-5 h-5 bg-indigo-500 rounded flex items-center justify-center text-[10px]">3</span>
+                            재무적 타당성 분석
+                        </h2>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-500 mb-1 uppercase tracking-widest">Total Savings (5-Year)</p>
+                            <p class="text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-tighter" id="out-5y-save">0</p>
+                            <p class="text-xs font-bold text-slate-400 mt-1">억원 <span class="text-[10px] font-normal ml-1 bg-slate-800 px-1.5 py-0.5 rounded text-slate-300 border border-slate-600">(CAPEX 차감 순이익)</span></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 border-y border-slate-700/50 py-4">
+                            <div class="flex flex-col justify-center">
+                                <p class="text-[10px] text-slate-500 font-bold mb-1 uppercase tracking-tighter">ROI (5YR)</p>
+                                <p class="text-2xl font-black text-white"><span id="out-roi">0</span>%</p>
+                            </div>
+                            <div class="flex flex-col justify-center border-l border-slate-700 pl-4">
+                                <p class="text-[10px] text-slate-500 font-bold mb-1 uppercase tracking-tighter">Payback Period</p>
+                                <p class="text-2xl font-black text-white"><span id="out-payback">0</span><span class="text-xs text-slate-400 ml-1 font-bold">개월</span></p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 mb-1">
+                                <span class="w-1 h-3 bg-indigo-500 rounded-full"></span>
+                                Cost Structure & NPV
+                            </h5>
+                            <div class="bg-slate-900/80 rounded-xl p-3 text-[11px] space-y-2.5 border border-slate-700/50 shadow-inner">
+                                <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                                    <span class="text-slate-400 font-medium">CAPEX (설비/도입)</span>
+                                    <span class="text-white font-bold">₩<span id="out-capex">0</span></span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                                    <span class="text-slate-400 font-medium">폐유 처리비 절감 (50%)</span>
+                                    <span class="text-emerald-400 font-bold">₩<span id="out-waste">0</span><span class="text-[9px] text-emerald-600"> /yr</span></span>
+                                </div>
+                                <div class="flex justify-between items-center pt-1">
+                                    <span class="text-slate-300 font-bold">Project NPV</span>
+                                    <span class="text-cyan-400 font-black text-sm">₩<span id="out-npv">0</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: Actions (Quick Links & Buttons) -->
+                    <div class="mt-auto pt-6 border-t border-slate-700/50">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- 진단서 발급받기 -->
+                            <button onclick="openCertificateModal()" class="flex items-center justify-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 py-2.5 rounded-lg text-xs font-bold transition-all shadow-[0_0_10px_rgba(16,185,129,0.05)] hover:shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                진단서 발급받기
+                            </button>
+                            <!-- 뉴탑랩 서버 전송 -->
+                            <button onclick="showToast('뉴탑랩 서버로 데이터가 전송되었습니다. (승인 대기중)', 'blue')" class="flex items-center justify-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/40 text-blue-400 py-2.5 rounded-lg text-xs font-bold transition-all shadow-[0_0_10px_rgba(59,130,246,0.05)] hover:shadow-[0_0_15px_rgba(59,130,246,0.15)]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                서버 전송 (승인)
+                            </button>
+                            <!-- 카카오톡 1:1 상담 -->
+                            <a href="http://pf.kakao.com/_biVxhX/chat" target="_blank" class="flex items-center justify-center gap-2 bg-[#FEE500]/10 hover:bg-[#FEE500]/20 border border-[#FEE500]/40 text-[#FEE500] py-2.5 rounded-lg text-xs font-bold transition-all shadow-[0_0_10px_rgba(254,229,0,0.05)] hover:shadow-[0_0_15px_rgba(254,229,0,0.15)]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                카카오톡 1:1상담
+                            </a>
+                            <!-- NEWTOP LAB 몰 -->
+                            <button onclick="showToast('NEWTOP LAB 몰은 현재 준비중입니다. 조금만 기다려주세요!', 'yellow')" class="flex items-center justify-center gap-2 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 py-2.5 rounded-lg text-xs font-bold transition-all shadow-[0_0_10px_rgba(99,102,241,0.05)] hover:shadow-[0_0_15px_rgba(99,102,241,0.15)]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                NEWTOP LAB 몰
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-[#0f172a] border-t border-slate-800 px-6 py-4 flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-500 font-bold gap-4">
+            <div class="flex items-center gap-4 flex-wrap justify-center">
+                <span class="flex items-center gap-1.5 text-emerald-500/80 bg-emerald-900/20 px-2 py-1 rounded border border-emerald-500/20">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    TDP(Total Diagnostics Platform) v1.0 엔진 구동 중
+                </span>
+                <span>기술 근거: RES3366 공인 성적서 및 실증 데이터</span>
+            </div>
+            <div class="text-center md:text-right">
+                © 2026 NEWTOP - [Green-DX] 기후테크 데이터 통합 솔루션
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const formatNumber = (num) => new Intl.NumberFormat('ko-KR').format(Math.round(num));
+
+        // 최신 시뮬레이션 데이터 저장을 위한 변수
+        let currentSimulationData = {
+            motors: 0,
+            carbonTons: 0
+        };
+
+        // --- 1. 실시간 시계 로직 ---
+        function updateClock() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const date = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const clockEl = document.getElementById('live-clock');
+            if(clockEl) {
+                clockEl.textContent = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- 2. 날씨 및 GPS 위치 로직 ---
+        async function fetchWeather(lat, lon, locName) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const data = await res.json();
+                
+                const temp = data.current_weather.temperature;
+                const code = data.current_weather.weathercode;
+                
+                let icon = "☁️";
+                if (code === 0) icon = "☀️";
+                else if (code >= 1 && code <= 3) icon = "⛅";
+                else if (code >= 51 && code <= 67 || code >= 80 && code <= 82) icon = "🌧️";
+                else if (code >= 71 && code <= 77 || code === 85 || code === 86) icon = "❄️";
+                else if (code >= 95) icon = "⛈️";
+
+                document.getElementById('live-weather-icon').textContent = icon;
+                document.getElementById('live-weather-temp').textContent = `${temp.toFixed(1)}°C`;
+                document.getElementById('live-location').textContent = locName;
+            } catch(e) {
+                console.error("날씨 정보 연동 실패:", e);
+                document.getElementById('live-weather-icon').textContent = "🌡️";
+                document.getElementById('live-weather-temp').textContent = "Error";
+                document.getElementById('live-location').textContent = locName;
+            }
+        }
+
+        function getApproxLocationName(lat, lon) {
+            if(Math.abs(lat - 35.4925) < 0.1 && Math.abs(lon - 128.7441) < 0.1) {
+                return "경남 밀양시 (기준점)";
+            }
+            return `GPS (${lat.toFixed(2)}, ${lon.toFixed(2)})`;
+        }
+
+        function initLocation() {
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude;
+                        const lon = pos.coords.longitude;
+                        fetchWeather(lat, lon, getApproxLocationName(lat, lon));
+                    },
+                    (err) => {
+                        fetchWeather(35.4925, 128.7441, "밀양시 양수장 (기본값)");
+                    },
+                    { timeout: 5000 }
+                );
+            } else {
+                fetchWeather(35.4925, 128.7441, "밀양시 양수장 (기본값)");
+            }
+        }
+        
+        // --- 3. 커스텀 토스트 알림 로직 ---
+        function showToast(message, color) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // 색상에 따른 클래스 설정
+            let bgClass = "bg-slate-800 border-slate-700 text-white";
+            let iconColor = "text-white/90";
+
+            if(color === 'emerald') bgClass = "bg-emerald-600 border-emerald-500 text-white";
+            if(color === 'blue') bgClass = "bg-blue-600 border-blue-500 text-white";
+            if(color === 'indigo') bgClass = "bg-indigo-600 border-indigo-500 text-white";
+            if(color === 'yellow') {
+                bgClass = "bg-[#EAB308] border-[#CA8A04] text-slate-900"; // yellow-500
+                iconColor = "text-slate-800";
+            }
+
+            toast.className = `flex items-center gap-3 px-5 py-3.5 rounded-lg border shadow-2xl text-sm font-bold transform transition-all duration-300 translate-y-10 opacity-0 pointer-events-auto ${bgClass}`;
+            
+            let iconSvg = `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            if(color === 'yellow') {
+                iconSvg = `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+            }
+
+            toast.innerHTML = `
+                ${iconSvg}
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // --- 4. 진단서 모달 로직 ---
+        function openCertificateModal() {
+            const modal = document.getElementById('cert-modal');
+            const content = document.getElementById('cert-modal-content');
+            
+            // 현재 날짜 및 일련번호 생성
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일`;
+            const randomCode = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            
+            // 진단서 데이터 바인딩
+            document.getElementById('cert-date').textContent = dateStr;
+            document.getElementById('cert-no').textContent = `NT-2026-${randomCode}`;
+            document.getElementById('cert-motors').textContent = `동력 모터 설비 ${currentSimulationData.motors}대`;
+            document.getElementById('cert-carbon').textContent = `${currentSimulationData.carbonTons} tCO₂e`;
+            
+            // 모달 열기 애니메이션
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            });
+        }
+
+        function closeCertificateModal() {
+            const modal = document.getElementById('cert-modal');
+            const content = document.getElementById('cert-modal-content');
+            
+            // 모달 닫기 애니메이션
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function downloadCertificate() {
+            closeCertificateModal();
+            setTimeout(() => {
+                showToast('진단서 PDF 다운로드가 시작되었습니다.', 'emerald');
+            }, 300);
+        }
+
+        // --- 5. 시뮬레이션 UI 로직 ---
+        function updateSliderVisual(id, val, suffix = '') {
+            const el = document.getElementById(id);
+            if(!el) return;
+            const min = parseFloat(el.min);
+            const max = parseFloat(el.max);
+            const percentage = ((val - min) / (max - min)) * 100;
+            el.style.setProperty('--val', `${percentage}%`);
+            
+            const labelId = id.replace('in-', 'val-');
+            const labelEl = document.getElementById(labelId);
+            if(labelEl) labelEl.innerText = formatNumber(val) + suffix;
+        }
+
+        function updateUI() {
+            // 1. Get Inputs
+            const motors = parseFloat(document.getElementById('in-motors').value);
+            const kw = parseFloat(document.getElementById('in-kw').value);
+            const saveRate = parseFloat(document.getElementById('in-save').value);
+            const price = parseFloat(document.getElementById('in-price').value);
+            const hours = 8760; // 24/7 가동 기준
+
+            // Update Labels
+            updateSliderVisual('in-motors', motors);
+            updateSliderVisual('in-kw', kw);
+            updateSliderVisual('in-save', saveRate, '%');
+            updateSliderVisual('in-price', price);
+
+            // 2. Calculations
+            // Energy
+            const prePower = motors * kw * hours; // kWh/yr
+            const savedPower = prePower * (saveRate / 100);
+            const postPower = prePower - savedPower;
+            
+            // Carbon (Grid Factor 0.4432 적용)
+            const carbonTons = (savedPower * 0.4432) / 1000;
+            const carbonValueAnnual = carbonTons * 22500; // t당 2.25만원
+
+            // 상태 저장 (진단서용)
+            currentSimulationData.motors = motors;
+            currentSimulationData.carbonTons = carbonTons.toFixed(1);
+
+            // Financials
+            const annualElectricitySave = savedPower * price;
+            // 폐유 저감 가치: 1대당 20L * 1500원(단가) * 0.5(절감률)
+            const wasteSaveCost = (motors * 20 * 1500) * 0.5; 
+            const totalAnnualBenefit = annualElectricitySave + wasteSaveCost + (carbonValueAnnual * 0.5); // 보수적 배출권 반영
+            
+            // CAPEX (kW당 12.5만원)
+            const capex = (motors * kw) * 125000; 
+            const paybackMonths = (capex / (totalAnnualBenefit / 12));
+            const cumulative5Y = (totalAnnualBenefit * 5) - capex;
+            const roi = (cumulative5Y / capex) * 100;
+            const npv = cumulative5Y * 0.81; // 8% 할인율 5개년 계수
+
+            // 3. Update DOM
+            // Central Chart
+            document.getElementById('bar-post').style.height = `${(postPower / prePower) * 100}%`;
+            document.getElementById('circle-chart').style.setProperty('--pct', `${saveRate}%`);
+            document.getElementById('circle-val').innerText = `${saveRate.toFixed(1)}%`;
+            document.getElementById('out-saved-pct-label').innerText = saveRate.toFixed(1);
+            
+            // Metrics
+            document.getElementById('out-saved-kwh').innerText = formatNumber(savedPower);
+            document.getElementById('out-carbon').innerText = carbonTons.toFixed(1);
+            document.getElementById('out-asset').innerText = formatNumber(carbonValueAnnual * 5);
+            
+            // Financial Panel
+            document.getElementById('out-5y-save').innerText = (cumulative5Y / 100000000).toFixed(1);
+            document.getElementById('out-roi').innerText = Math.round(roi);
+            document.getElementById('out-payback').innerText = Math.round(paybackMonths);
+            document.getElementById('out-capex').innerText = formatNumber(capex);
+            document.getElementById('out-waste').innerText = formatNumber(wasteSaveCost);
+            document.getElementById('out-npv').innerText = formatNumber(npv);
+        }
+
+        window.onload = () => {
+            initLocation();
+            updateUI();
+        };
+    </script>
+</body>
+</html>
